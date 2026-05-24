@@ -1,7 +1,6 @@
 package org.kiwiproject.samples.activemq.producer;
 
 import io.dropwizard.core.Application;
-import io.dropwizard.core.setup.Bootstrap;
 import io.dropwizard.core.setup.Environment;
 import org.kiwiproject.dropwizard.activemq.DropwizardActiveMq;
 import org.kiwiproject.dropwizard.activemq.health.DeadLetterQueueHealthCheck;
@@ -12,10 +11,6 @@ public class ProducerApplication extends Application<ProducerConfig> {
 
     public static void main(String[] args) throws Exception {
         new ProducerApplication().run(args);
-    }
-
-    @Override
-    public void initialize(Bootstrap<ProducerConfig> bootstrap) {
     }
 
     @Override
