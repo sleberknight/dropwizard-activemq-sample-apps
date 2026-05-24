@@ -1,0 +1,11 @@
+meta {
+  name: Consumer-beta health check
+  type: http
+  seq: 4
+}
+
+get {
+  url: http://localhost:8092/healthcheck
+  body: none
+  auth: none
+}

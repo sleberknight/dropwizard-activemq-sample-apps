@@ -1,0 +1,11 @@
+meta {
+  name: Purge the DLQ (via consumer-beta)
+  type: http
+  seq: 2
+}
+
+delete {
+  url: http://localhost:8082/dlq
+  body: none
+  auth: none
+}

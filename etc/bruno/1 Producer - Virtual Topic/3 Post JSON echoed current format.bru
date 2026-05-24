@@ -1,0 +1,28 @@
+meta {
+  name: Post JSON (echoed current format)
+  type: http
+  seq: 3
+}
+
+post {
+  url: http://localhost:8080/produce
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "destination": "topic:orders",
+    "sendToAllEventsQueue": false,
+    "format": "JSON_ECHOED_CURRENT",
+    "messageType": "ORDER_PLACED",
+    "data": {
+      "orderId": "789",
+      "total": 99.99
+    }
+  }
+}

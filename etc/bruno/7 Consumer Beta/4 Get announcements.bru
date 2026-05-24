@@ -1,0 +1,15 @@
+meta {
+  name: Get messages filtered by fixedtopic:announcements
+  type: http
+  seq: 4
+}
+
+get {
+  url: http://localhost:8082/received?destination=fixedtopic:announcements
+  body: none
+  auth: none
+}
+
+query {
+  destination: fixedtopic:announcements
+}

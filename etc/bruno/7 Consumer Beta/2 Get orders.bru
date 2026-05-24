@@ -1,0 +1,15 @@
+meta {
+  name: Get orders received by consumer-beta
+  type: http
+  seq: 2
+}
+
+get {
+  url: http://localhost:8082/received?destination=topic:orders
+  body: none
+  auth: none
+}
+
+query {
+  destination: topic:orders
+}

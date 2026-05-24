@@ -1,0 +1,28 @@
+meta {
+  name: Post a single notification
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://localhost:8080/produce
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "destination": "queue:notifications",
+    "sendToAllEventsQueue": false,
+    "format": "JSON_CURRENT",
+    "messageType": "USER_NOTIFICATION",
+    "data": {
+      "userId": "42",
+      "message": "Your order has shipped"
+    }
+  }
+}

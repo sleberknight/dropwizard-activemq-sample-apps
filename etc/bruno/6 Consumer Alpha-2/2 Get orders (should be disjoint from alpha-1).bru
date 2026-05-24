@@ -1,0 +1,15 @@
+meta {
+  name: Get orders (should be disjoint from alpha-1's orders)
+  type: http
+  seq: 2
+}
+
+get {
+  url: http://localhost:8083/received?destination=topic:orders
+  body: none
+  auth: none
+}
+
+query {
+  destination: topic:orders
+}

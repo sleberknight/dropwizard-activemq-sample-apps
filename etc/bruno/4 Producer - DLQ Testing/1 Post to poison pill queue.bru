@@ -1,0 +1,24 @@
+meta {
+  name: Post to poison pill queue
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://localhost:8080/produce
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "destination": "queue:poison_pill",
+    "sendToAllEventsQueue": false,
+    "format": "TEXT",
+    "data": "this will expire"
+  }
+}

@@ -1,0 +1,28 @@
+meta {
+  name: Post JSON (legacy format) - sendToAllEventsQueue true
+  type: http
+  seq: 2
+}
+
+post {
+  url: http://localhost:8080/produce
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "destination": "topic:orders",
+    "sendToAllEventsQueue": true,
+    "format": "JSON_LEGACY",
+    "messageType": "ORDER_PLACED",
+    "data": {
+      "orderId": "456",
+      "total": 19.99
+    }
+  }
+}
