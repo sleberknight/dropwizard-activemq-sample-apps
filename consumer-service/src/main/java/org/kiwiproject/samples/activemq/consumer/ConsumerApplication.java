@@ -1,5 +1,7 @@
 package org.kiwiproject.samples.activemq.consumer;
 
+import io.dropwizard.configuration.EnvironmentVariableSubstitutor;
+import io.dropwizard.configuration.SubstitutingSourceProvider;
 import io.dropwizard.core.Application;
 import io.dropwizard.core.setup.Bootstrap;
 import io.dropwizard.core.setup.Environment;
@@ -18,6 +20,9 @@ public class ConsumerApplication extends Application<ConsumerConfig> {
 
     @Override
     public void initialize(Bootstrap<ConsumerConfig> bootstrap) {
+        bootstrap.setConfigurationSourceProvider(new SubstitutingSourceProvider(
+                bootstrap.getConfigurationSourceProvider(),
+                new EnvironmentVariableSubstitutor(false)));
     }
 
     @Override
