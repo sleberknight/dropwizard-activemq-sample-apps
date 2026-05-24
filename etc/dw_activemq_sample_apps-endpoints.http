@@ -1,11 +1,6 @@
-// =============================================================================
-// Producer - Virtual Topic (topic:orders)
-//
-// consumer-alpha receives each message via its own durable queue
-// (Consumer.consumer-alpha.VirtualTopic.orders).
-// consumer-beta receives a copy via queue:all_events when
-// sendToAllEventsQueue is true.
-// =============================================================================
+### Producer - Virtual Topic (topic:orders)
+### consumer-alpha receives via Consumer.consumer-alpha.VirtualTopic.orders
+### consumer-beta receives via queue:all_events when sendToAllEventsQueue is true
 
 ### Post JSON (current format) - sendToAllEventsQueue: true
 POST http://localhost:8080/produce
@@ -100,11 +95,8 @@ Content-Type: application/json
   "data": "bytes order message"
 }
 
-// =============================================================================
-// Producer - Plain JMS Topic (fixedtopic:announcements)
-//
-// Both consumer-alpha and consumer-beta receive every message (fan-out).
-// =============================================================================
+### Producer - Plain JMS Topic (fixedtopic:announcements)
+### Both consumer-alpha and consumer-beta receive every message (fan-out)
 
 ### Post JSON to plain JMS topic
 POST http://localhost:8080/produce
@@ -120,12 +112,8 @@ Content-Type: application/json
   }
 }
 
-// =============================================================================
-// Producer - Regular Queue (queue:notifications)
-//
-// Both consumer-alpha and consumer-beta compete for messages. Each message
-// is delivered to exactly one instance. Send multiple to observe distribution.
-// =============================================================================
+### Producer - Regular Queue (queue:notifications)
+### Competing consumers: each message delivered to exactly one of alpha or beta
 
 ### Post a single notification
 POST http://localhost:8080/produce
@@ -158,13 +146,8 @@ Content-Type: application/json
   }
 }
 
-// =============================================================================
-// Producer - DLQ Testing (queue:poison_pill)
-//
-// No consumer subscribes to this queue. Messages expire after the 30s TTL
-// and move to ActiveMQ.DLQ. The dead-letter-queue health check on
-// consumer-alpha will then report unhealthy.
-// =============================================================================
+### Producer - DLQ Testing (queue:poison_pill)
+### No consumer; messages expire after 30s TTL and move to ActiveMQ.DLQ
 
 ### Post to poison pill queue
 POST http://localhost:8080/produce
@@ -177,9 +160,7 @@ Content-Type: application/json
   "data": "this will expire"
 }
 
-// =============================================================================
-// Consumer Alpha - Received Messages (port 8081)
-// =============================================================================
+### Consumer Alpha - Received Messages (port 8081)
 
 ### Get all messages received by consumer-alpha
 GET http://localhost:8081/received
@@ -193,9 +174,7 @@ GET http://localhost:8081/received?destination=fixedtopic:announcements
 ### Clear messages received by consumer-alpha
 DELETE http://localhost:8081/received
 
-// =============================================================================
-// Consumer Beta - Received Messages (port 8082)
-// =============================================================================
+### Consumer Beta - Received Messages (port 8082)
 
 ### Get all messages received by consumer-beta
 GET http://localhost:8082/received
@@ -209,11 +188,8 @@ GET http://localhost:8082/received?destination=fixedtopic:announcements
 ### Clear messages received by consumer-beta
 DELETE http://localhost:8082/received
 
-// =============================================================================
-// DLQ Management
-//
-// Both endpoints purge the same ActiveMQ.DLQ on the broker — use either.
-// =============================================================================
+### DLQ Management
+### Both endpoints purge the same ActiveMQ.DLQ on the broker - use either
 
 ### Purge the DLQ (via consumer-alpha)
 DELETE http://localhost:8081/dlq
@@ -221,9 +197,7 @@ DELETE http://localhost:8081/dlq
 ### Purge the DLQ (via consumer-beta)
 DELETE http://localhost:8082/dlq
 
-// =============================================================================
-// Health Checks
-// =============================================================================
+### Health Checks
 
 ### Producer health check (includes ActiveMQ Producer Stats and dead-letter-queue)
 GET http://localhost:8090/healthcheck
