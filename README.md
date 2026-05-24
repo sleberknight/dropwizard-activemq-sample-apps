@@ -147,6 +147,7 @@ Returns all received messages. Optional `?destination=topic:orders` filter.
 ```json
 {
   "serviceName": "consumer-alpha",
+  "instanceId": "consumer-alpha-1",
   "messages": [
     {
       "destination": "topic:orders",
