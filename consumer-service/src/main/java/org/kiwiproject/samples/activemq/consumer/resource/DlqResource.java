@@ -49,12 +49,12 @@ public class DlqResource {
             if (status == 200) {
                 return Response.noContent().build();
             }
-            log.warn("Jolokia purge returned unexpected status {}", status);
+            LOG.warn("Jolokia purge returned unexpected status {}", status);
             return Response.serverError()
                     .entity(Map.of("error", "Jolokia returned status " + status))
                     .build();
         } catch (Exception e) {
-            log.error("Failed to purge DLQ", e);
+            LOG.error("Failed to purge DLQ", e);
             return Response.serverError().entity(Map.of("error", e.getMessage())).build();
         }
     }

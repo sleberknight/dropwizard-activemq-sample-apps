@@ -25,7 +25,7 @@ public class MessageStoreConsumer implements ActiveMqConsumer {
         var parsedMessageType = message.getMessageType().orElse("UNKNOWN");
         var contentType = message.getContentType().map(Enum::name).orElse("UNKNOWN");
 
-        log.info("Received {} message on {}: type={}", contentType, destination, parsedMessageType);
+        LOG.info("Received {} message on {}: type={}", contentType, destination, parsedMessageType);
 
         store.add(ReceivedMessage.builder()
                 .destination(destination)
