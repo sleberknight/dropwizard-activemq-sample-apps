@@ -6,7 +6,7 @@
 
     <parent>
         <groupId>org.kiwiproject.samples</groupId>
-        <artifactId>dw-activemq-sample-apps</artifactId>
+        <artifactId>dropwizard-activemq-sample-apps</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
