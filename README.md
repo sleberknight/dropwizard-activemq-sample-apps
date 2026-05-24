@@ -42,15 +42,13 @@ docker compose up --build
 
 ## Message Topology
 
-- **Producer** sends to `topic:orders`, `fixedtopic:announcements`, and `queue:poison_pill`
-- **Consumer Alpha** subscribes to `topic:orders` and `fixedtopic:announcements`
-- **Consumer Beta** subscribes to `queue:all_events` and `fixedtopic:announcements`
-- `topic:orders` is a virtual topic: consumer-alpha receives via its own durable queue; `queue:all_events`
-  gets a copy when `sendToAllEventsQueue: true`
-- `fixedtopic:announcements` is a plain JMS topic: both consumer-alpha and consumer-beta receive every message
-- `queue:notifications` is a regular queue: both consumer-alpha and consumer-beta compete for messages,
-  so each message is delivered to exactly one of them
-- `queue:poison_pill` has no consumer; messages expire after 30 seconds (configured TTL) and move to `ActiveMQ.DLQ`
+| Destination | Type | Producer | Consumers | Behavior |
+|---|---|---|---|---|
+| `topic:orders` | Virtual topic | producer-service | consumer-alpha | Each subscriber gets its own durable queue copy; consumer-alpha receives via `Consumer.consumer-alpha.VirtualTopic.orders` |
+| `fixedtopic:announcements` | Plain JMS topic | producer-service | consumer-alpha, consumer-beta | Every subscriber receives every message |
+| `queue:notifications` | Queue | producer-service | consumer-alpha, consumer-beta | Competing consumers — each message delivered to exactly one instance |
+| `queue:all_events` | Queue | producer-service (side effect) | consumer-beta | Receives a copy of every message sent with `sendToAllEventsQueue: true` |
+| `queue:poison_pill` | Queue | producer-service | none | No consumer; messages expire after 30s TTL and move to `ActiveMQ.DLQ` |
 
 ## Producer API
 
