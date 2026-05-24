@@ -2,7 +2,11 @@
 
 Sample Dropwizard services for functional testing of dropwizard-activemq before release.
 
-An IntelliJ HTTP client file covering all endpoints is at [`etc/dw_activemq_sample_apps-endpoints.http`](etc/dw_activemq_sample_apps-endpoints.http).
+API collections covering all endpoints are in the `etc/` directory:
+
+- IntelliJ HTTP client: [`etc/dw_activemq_sample_apps-endpoints.http`](etc/dw_activemq_sample_apps-endpoints.http)
+- Postman collection: [`etc/dw_activemq_sample_apps.postman_collection.json`](etc/dw_activemq_sample_apps.postman_collection.json)
+- Bruno collection: [`etc/bruno/`](etc/bruno/) (open the `etc/bruno` folder in Bruno)
 
 ## Prerequisites
 
