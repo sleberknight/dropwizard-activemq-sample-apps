@@ -1,0 +1,322 @@
+{
+  "info": {
+    "name": "Dropwizard ActiveMQ Sample Apps",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Producer - Virtual Topic (topic:orders)",
+      "item": [
+        {
+          "name": "Post JSON (current format) - sendToAllEventsQueue: true",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"destination\": \"topic:orders\",\n  \"sendToAllEventsQueue\": true,\n  \"format\": \"JSON_CURRENT\",\n  \"messageType\": \"ORDER_PLACED\",\n  \"data\": {\n    \"orderId\": \"123\",\n    \"total\": 49.99\n  }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "http://localhost:8080/produce", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["produce"] }
+          }
+        },
+        {
+          "name": "Post JSON (legacy format) - sendToAllEventsQueue: true",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"destination\": \"topic:orders\",\n  \"sendToAllEventsQueue\": true,\n  \"format\": \"JSON_LEGACY\",\n  \"messageType\": \"ORDER_PLACED\",\n  \"data\": {\n    \"orderId\": \"456\",\n    \"total\": 19.99\n  }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "http://localhost:8080/produce", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["produce"] }
+          }
+        },
+        {
+          "name": "Post JSON (echoed current format)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"destination\": \"topic:orders\",\n  \"sendToAllEventsQueue\": false,\n  \"format\": \"JSON_ECHOED_CURRENT\",\n  \"messageType\": \"ORDER_PLACED\",\n  \"data\": {\n    \"orderId\": \"789\",\n    \"total\": 99.99\n  }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "http://localhost:8080/produce", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["produce"] }
+          }
+        },
+        {
+          "name": "Post JSON (echoed legacy format)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"destination\": \"topic:orders\",\n  \"sendToAllEventsQueue\": false,\n  \"format\": \"JSON_ECHOED_LEGACY\",\n  \"messageType\": \"ORDER_PLACED\",\n  \"data\": {\n    \"orderId\": \"101\",\n    \"total\": 9.99\n  }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "http://localhost:8080/produce", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["produce"] }
+          }
+        },
+        {
+          "name": "Post XML",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"destination\": \"topic:orders\",\n  \"sendToAllEventsQueue\": false,\n  \"format\": \"XML\",\n  \"data\": \"<order><id>123</id></order>\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "http://localhost:8080/produce", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["produce"] }
+          }
+        },
+        {
+          "name": "Post TEXT",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"destination\": \"topic:orders\",\n  \"sendToAllEventsQueue\": false,\n  \"format\": \"TEXT\",\n  \"data\": \"plain text order message\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "http://localhost:8080/produce", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["produce"] }
+          }
+        },
+        {
+          "name": "Post BYTES",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"destination\": \"topic:orders\",\n  \"sendToAllEventsQueue\": false,\n  \"format\": \"BYTES\",\n  \"data\": \"bytes order message\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "http://localhost:8080/produce", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["produce"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Producer - Plain JMS Topic (fixedtopic:announcements)",
+      "item": [
+        {
+          "name": "Post JSON to plain JMS topic",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"destination\": \"fixedtopic:announcements\",\n  \"sendToAllEventsQueue\": false,\n  \"format\": \"JSON_CURRENT\",\n  \"messageType\": \"SYSTEM_NOTICE\",\n  \"data\": {\n    \"message\": \"Scheduled maintenance at midnight\"\n  }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "http://localhost:8080/produce", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["produce"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Producer - Regular Queue (queue:notifications)",
+      "item": [
+        {
+          "name": "Post a single notification",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"destination\": \"queue:notifications\",\n  \"sendToAllEventsQueue\": false,\n  \"format\": \"JSON_CURRENT\",\n  \"messageType\": \"USER_NOTIFICATION\",\n  \"data\": {\n    \"userId\": \"42\",\n    \"message\": \"Your order has shipped\"\n  }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "http://localhost:8080/produce", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["produce"] }
+          }
+        },
+        {
+          "name": "Post multiple notifications to observe competing consumer behavior",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"destination\": \"queue:notifications\",\n  \"sendToAllEventsQueue\": false,\n  \"count\": 10,\n  \"format\": \"JSON_CURRENT\",\n  \"messageType\": \"USER_NOTIFICATION\",\n  \"data\": {\n    \"userId\": \"42\",\n    \"message\": \"Your order has shipped\"\n  }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "http://localhost:8080/produce", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["produce"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Producer - DLQ Testing (queue:poison_pill)",
+      "item": [
+        {
+          "name": "Post to poison pill queue",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"destination\": \"queue:poison_pill\",\n  \"sendToAllEventsQueue\": false,\n  \"format\": \"TEXT\",\n  \"data\": \"this will expire\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "http://localhost:8080/produce", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["produce"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Consumer Alpha-1 - Received Messages (port 8081)",
+      "item": [
+        {
+          "name": "Get all messages",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "http://localhost:8081/received", "protocol": "http", "host": ["localhost"], "port": "8081", "path": ["received"] }
+          }
+        },
+        {
+          "name": "Get messages filtered by topic:orders",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "http://localhost:8081/received?destination=topic:orders", "protocol": "http", "host": ["localhost"], "port": "8081", "path": ["received"], "query": [{ "key": "destination", "value": "topic:orders" }] }
+          }
+        },
+        {
+          "name": "Get messages filtered by fixedtopic:announcements",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "http://localhost:8081/received?destination=fixedtopic:announcements", "protocol": "http", "host": ["localhost"], "port": "8081", "path": ["received"], "query": [{ "key": "destination", "value": "fixedtopic:announcements" }] }
+          }
+        },
+        {
+          "name": "Clear messages",
+          "request": {
+            "method": "DELETE",
+            "url": { "raw": "http://localhost:8081/received", "protocol": "http", "host": ["localhost"], "port": "8081", "path": ["received"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Consumer Alpha-2 - Received Messages (port 8083)",
+      "item": [
+        {
+          "name": "Get all messages",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "http://localhost:8083/received", "protocol": "http", "host": ["localhost"], "port": "8083", "path": ["received"] }
+          }
+        },
+        {
+          "name": "Get orders (should be disjoint from alpha-1's orders)",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "http://localhost:8083/received?destination=topic:orders", "protocol": "http", "host": ["localhost"], "port": "8083", "path": ["received"], "query": [{ "key": "destination", "value": "topic:orders" }] }
+          }
+        },
+        {
+          "name": "Clear messages",
+          "request": {
+            "method": "DELETE",
+            "url": { "raw": "http://localhost:8083/received", "protocol": "http", "host": ["localhost"], "port": "8083", "path": ["received"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Consumer Beta - Received Messages (port 8082)",
+      "item": [
+        {
+          "name": "Get all messages",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "http://localhost:8082/received", "protocol": "http", "host": ["localhost"], "port": "8082", "path": ["received"] }
+          }
+        },
+        {
+          "name": "Get orders received by consumer-beta",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "http://localhost:8082/received?destination=topic:orders", "protocol": "http", "host": ["localhost"], "port": "8082", "path": ["received"], "query": [{ "key": "destination", "value": "topic:orders" }] }
+          }
+        },
+        {
+          "name": "Get messages filtered by queue:notifications",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "http://localhost:8082/received?destination=queue:notifications", "protocol": "http", "host": ["localhost"], "port": "8082", "path": ["received"], "query": [{ "key": "destination", "value": "queue:notifications" }] }
+          }
+        },
+        {
+          "name": "Get messages filtered by fixedtopic:announcements",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "http://localhost:8082/received?destination=fixedtopic:announcements", "protocol": "http", "host": ["localhost"], "port": "8082", "path": ["received"], "query": [{ "key": "destination", "value": "fixedtopic:announcements" }] }
+          }
+        },
+        {
+          "name": "Clear messages",
+          "request": {
+            "method": "DELETE",
+            "url": { "raw": "http://localhost:8082/received", "protocol": "http", "host": ["localhost"], "port": "8082", "path": ["received"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "DLQ Management",
+      "item": [
+        {
+          "name": "Purge the DLQ (via consumer-alpha-1)",
+          "request": {
+            "method": "DELETE",
+            "url": { "raw": "http://localhost:8081/dlq", "protocol": "http", "host": ["localhost"], "port": "8081", "path": ["dlq"] }
+          }
+        },
+        {
+          "name": "Purge the DLQ (via consumer-beta)",
+          "request": {
+            "method": "DELETE",
+            "url": { "raw": "http://localhost:8082/dlq", "protocol": "http", "host": ["localhost"], "port": "8082", "path": ["dlq"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Health Checks",
+      "item": [
+        {
+          "name": "Producer health check",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "http://localhost:8090/healthcheck", "protocol": "http", "host": ["localhost"], "port": "8090", "path": ["healthcheck"] }
+          }
+        },
+        {
+          "name": "Consumer-alpha-1 health check",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "http://localhost:8091/healthcheck", "protocol": "http", "host": ["localhost"], "port": "8091", "path": ["healthcheck"] }
+          }
+        },
+        {
+          "name": "Consumer-alpha-2 health check",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "http://localhost:8093/healthcheck", "protocol": "http", "host": ["localhost"], "port": "8093", "path": ["healthcheck"] }
+          }
+        },
+        {
+          "name": "Consumer-beta health check",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "http://localhost:8092/healthcheck", "protocol": "http", "host": ["localhost"], "port": "8092", "path": ["healthcheck"] }
+          }
+        }
+      ]
+    }
+  ]
+}
