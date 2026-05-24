@@ -50,23 +50,23 @@ docker compose up --build
 
 ## Services
 
-| Service | App port | Admin port |
-|---|---|---|
-| ActiveMQ | 61616 (TCP), 8161 (UI) | — |
-| producer | 8080 | 8090 |
-| consumer-alpha-1 | 8081 | 8091 |
-| consumer-alpha-2 | 8082 | 8092 |
-| consumer-beta | 8083 | 8093 |
+| Service          | App port               | Admin port |
+|------------------|------------------------|------------|
+| ActiveMQ         | 61616 (TCP), 8161 (UI) | —          |
+| producer         | 8080                   | 8090       |
+| consumer-alpha-1 | 8081                   | 8091       |
+| consumer-alpha-2 | 8082                   | 8092       |
+| consumer-beta    | 8083                   | 8093       |
 
 ## Message Topology
 
-| Destination | Type | Producer | Consumers | Behavior |
-|---|---|---|---|---|
-| `topic:orders` | Virtual topic | producer-service | consumer-alpha-1, consumer-alpha-2, consumer-beta | Alpha instances compete (only one gets each message); beta gets every message independently via its own durable queue |
-| `fixedtopic:announcements` | Plain JMS topic | producer-service | consumer-alpha-1, consumer-alpha-2, consumer-beta | Every subscriber receives every message |
-| `queue:notifications` | Queue | producer-service | consumer-alpha-1, consumer-alpha-2, consumer-beta | Competing consumers — each message delivered to exactly one instance |
-| `queue:all_events` | Queue | producer-service (side effect) | consumer-beta | Receives a copy of every message sent with `sendToAllEventsQueue: true` |
-| `queue:poison_pill` | Queue | producer-service | none | No consumer; messages expire after 30s TTL and move to `ActiveMQ.DLQ` |
+| Destination                | Type            | Producer                       | Consumers                                         | Behavior                                                                                                              |
+|----------------------------|-----------------|--------------------------------|---------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------|
+| `topic:orders`             | Virtual topic   | producer-service               | consumer-alpha-1, consumer-alpha-2, consumer-beta | Alpha instances compete (only one gets each message); beta gets every message independently via its own durable queue |
+| `fixedtopic:announcements` | Plain JMS topic | producer-service               | consumer-alpha-1, consumer-alpha-2, consumer-beta | Every subscriber receives every message                                                                               |
+| `queue:notifications`      | Queue           | producer-service               | consumer-alpha-1, consumer-alpha-2, consumer-beta | Competing consumers — each message delivered to exactly one instance                                                  |
+| `queue:all_events`         | Queue           | producer-service (side effect) | consumer-beta                                     | Receives a copy of every message sent with `sendToAllEventsQueue: true`                                               |
+| `queue:poison_pill`        | Queue           | producer-service               | none                                              | No consumer; messages expire after 30s TTL and move to `ActiveMQ.DLQ`                                                 |
 
 ## Producer API
 
@@ -98,15 +98,15 @@ Response:
 
 **format values:**
 
-| Format | Description |
-|---|---|
-| `JSON_CURRENT` | `{"messageType":"...", "data":{...}}` |
-| `JSON_LEGACY` | `{"metaData":{"type":"..."}, "data":{...}}` |
-| `JSON_ECHOED_CURRENT` | `{"messageType":"ECHO_MESSAGE","echoedMessage":{"messageType":"...",...}}` |
-| `JSON_ECHOED_LEGACY` | `{"messageType":"ECHO_MESSAGE","echoedMessage":{"metaData":{"type":"..."},...}}` |
-| `XML` | `data` sent as TEXT_MESSAGE (pass XML string as `"data"` value) |
-| `TEXT` | `data` sent as TEXT_MESSAGE (pass plain string as `"data"` value) |
-| `BYTES` | `data` sent as BytesMessage (pass string as `"data"` value, UTF-8 encoded) |
+| Format                | Description                                                                      |
+|-----------------------|----------------------------------------------------------------------------------|
+| `JSON_CURRENT`        | `{"messageType":"...", "data":{...}}`                                            |
+| `JSON_LEGACY`         | `{"metaData":{"type":"..."}, "data":{...}}`                                      |
+| `JSON_ECHOED_CURRENT` | `{"messageType":"ECHO_MESSAGE","echoedMessage":{"messageType":"...",...}}`       |
+| `JSON_ECHOED_LEGACY`  | `{"messageType":"ECHO_MESSAGE","echoedMessage":{"metaData":{"type":"..."},...}}` |
+| `XML`                 | `data` sent as TEXT_MESSAGE (pass XML string as `"data"` value)                  |
+| `TEXT`                | `data` sent as TEXT_MESSAGE (pass plain string as `"data"` value)                |
+| `BYTES`               | `data` sent as BytesMessage (pass string as `"data"` value, UTF-8 encoded)       |
 
 For BYTES format, `sendToAllEventsQueue` is ignored — bytes go to the specified destination only.
 When a consumer receives a BYTES message, `rawPayload` in the response is base64-encoded.
