@@ -1,0 +1,182 @@
+### Post JSON (current format) to a virtual topic
+POST http://localhost:8080/produce
+Content-Type: application/json
+
+{
+  "destination": "topic:orders",
+  "sendToAllEventsQueue": true,
+  "count": 1,
+  "format": "JSON_CURRENT",
+  "messageType": "ORDER_PLACED",
+  "data": {
+    "orderId": "123",
+    "total": 49.99
+  }
+}
+
+### Post JSON (legacy format) to a virtual topic
+POST http://localhost:8080/produce
+Content-Type: application/json
+
+{
+  "destination": "topic:orders",
+  "sendToAllEventsQueue": true,
+  "format": "JSON_LEGACY",
+  "messageType": "ORDER_PLACED",
+  "data": {
+    "orderId": "456",
+    "total": 19.99
+  }
+}
+
+### Post JSON (echoed current format) to a virtual topic
+POST http://localhost:8080/produce
+Content-Type: application/json
+
+{
+  "destination": "topic:orders",
+  "sendToAllEventsQueue": false,
+  "format": "JSON_ECHOED_CURRENT",
+  "messageType": "ORDER_PLACED",
+  "data": {
+    "orderId": "789",
+    "total": 99.99
+  }
+}
+
+### Post JSON (echoed legacy format) to a virtual topic
+POST http://localhost:8080/produce
+Content-Type: application/json
+
+{
+  "destination": "topic:orders",
+  "sendToAllEventsQueue": false,
+  "format": "JSON_ECHOED_LEGACY",
+  "messageType": "ORDER_PLACED",
+  "data": {
+    "orderId": "101",
+    "total": 9.99
+  }
+}
+
+### Post XML to a virtual topic
+POST http://localhost:8080/produce
+Content-Type: application/json
+
+{
+  "destination": "topic:orders",
+  "sendToAllEventsQueue": false,
+  "format": "XML",
+  "data": "<order><id>123</id></order>"
+}
+
+### Post TEXT to a virtual topic
+POST http://localhost:8080/produce
+Content-Type: application/json
+
+{
+  "destination": "topic:orders",
+  "sendToAllEventsQueue": false,
+  "format": "TEXT",
+  "data": "plain text order message"
+}
+
+### Post BYTES to a virtual topic
+POST http://localhost:8080/produce
+Content-Type: application/json
+
+{
+  "destination": "topic:orders",
+  "sendToAllEventsQueue": false,
+  "format": "BYTES",
+  "data": "bytes order message"
+}
+
+### Post JSON to a plain JMS topic (fan-out: both consumer-alpha and consumer-beta receive it)
+POST http://localhost:8080/produce
+Content-Type: application/json
+
+{
+  "destination": "fixedtopic:announcements",
+  "sendToAllEventsQueue": false,
+  "format": "JSON_CURRENT",
+  "messageType": "SYSTEM_NOTICE",
+  "data": {
+    "message": "Scheduled maintenance at midnight"
+  }
+}
+
+### Post JSON to a regular queue (competing consumers: only one of alpha or beta receives it)
+POST http://localhost:8080/produce
+Content-Type: application/json
+
+{
+  "destination": "queue:notifications",
+  "sendToAllEventsQueue": false,
+  "format": "JSON_CURRENT",
+  "messageType": "USER_NOTIFICATION",
+  "data": {
+    "userId": "42",
+    "message": "Your order has shipped"
+  }
+}
+
+### Post multiple messages to the notifications queue to observe competing consumer behavior
+POST http://localhost:8080/produce
+Content-Type: application/json
+
+{
+  "destination": "queue:notifications",
+  "sendToAllEventsQueue": false,
+  "count": 10,
+  "format": "JSON_CURRENT",
+  "messageType": "USER_NOTIFICATION",
+  "data": {
+    "userId": "42",
+    "message": "Your order has shipped"
+  }
+}
+
+### Post to the poison pill queue (no consumer; message expires after 30s TTL and moves to ActiveMQ.DLQ)
+POST http://localhost:8080/produce
+Content-Type: application/json
+
+{
+  "destination": "queue:poison_pill",
+  "sendToAllEventsQueue": false,
+  "format": "TEXT",
+  "data": "this will expire"
+}
+
+### Get all messages received by consumer-alpha
+GET http://localhost:8081/received
+
+### Get messages received by consumer-alpha filtered by destination
+GET http://localhost:8081/received?destination=topic:orders
+
+### Clear messages received by consumer-alpha
+DELETE http://localhost:8081/received
+
+### Get all messages received by consumer-beta
+GET http://localhost:8082/received
+
+### Get messages received by consumer-beta filtered by destination
+GET http://localhost:8082/received?destination=queue:notifications
+
+### Clear messages received by consumer-beta
+DELETE http://localhost:8082/received
+
+### Purge the DLQ (via consumer-alpha)
+DELETE http://localhost:8081/dlq
+
+### Purge the DLQ (via consumer-beta)
+DELETE http://localhost:8082/dlq
+
+### consumer-alpha health check
+GET http://localhost:8091/healthcheck
+
+### consumer-beta health check
+GET http://localhost:8092/healthcheck
+
+### producer health check
+GET http://localhost:8090/healthcheck
