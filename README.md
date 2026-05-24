@@ -1,4 +1,4 @@
-# dropwizard-activemq-sample-apps
+# Dropwizard ActiveMQ Sample Apps
 
 Sample Dropwizard services for functional testing of dropwizard-activemq before release.
 
