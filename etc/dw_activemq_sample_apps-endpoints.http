@@ -1,6 +1,6 @@
 ### Producer - Virtual Topic (topic:orders)
-### Both consumer-alpha and consumer-beta receive every message independently via their own durable queues
-### (Consumer.consumer-alpha.VirtualTopic.orders and Consumer.consumer-beta.VirtualTopic.orders)
+### Both consumer-alpha-1 and consumer-beta receive every message independently via their own durable queues
+### (Consumer.consumer-alpha-1.VirtualTopic.orders and Consumer.consumer-beta.VirtualTopic.orders)
 ### consumer-beta also receives a copy via queue:all_events when sendToAllEventsQueue is true
 
 ### Post JSON (current format) - sendToAllEventsQueue: true
@@ -97,7 +97,7 @@ Content-Type: application/json
 }
 
 ### Producer - Plain JMS Topic (fixedtopic:announcements)
-### Both consumer-alpha and consumer-beta receive every message (fan-out)
+### Both consumer-alpha-1 and consumer-beta receive every message (fan-out)
 
 ### Post JSON to plain JMS topic
 POST http://localhost:8080/produce
@@ -163,24 +163,36 @@ Content-Type: application/json
 
 ### Consumer Alpha - Received Messages (port 8081)
 
-### Get all messages received by consumer-alpha
+### Get all messages received by consumer-alpha-1
 GET http://localhost:8081/received
 
-### Get messages received by consumer-alpha filtered by destination
+### Get messages received by consumer-alpha-1 filtered by destination
 GET http://localhost:8081/received?destination=topic:orders
 
-### Get announcements received by consumer-alpha
+### Get announcements received by consumer-alpha-1
 GET http://localhost:8081/received?destination=fixedtopic:announcements
 
-### Clear messages received by consumer-alpha
+### Clear messages received by consumer-alpha-1
 DELETE http://localhost:8081/received
+
+### Consumer Alpha-2 - Received Messages (port 8083)
+### Same serviceName as alpha-1; compare with alpha-1 to verify virtual topic competing consumer behavior
+
+### Get all messages received by consumer-alpha-2
+GET http://localhost:8083/received
+
+### Get orders received by consumer-alpha-2 (should be disjoint from alpha-1's orders)
+GET http://localhost:8083/received?destination=topic:orders
+
+### Clear messages received by consumer-alpha-2
+DELETE http://localhost:8083/received
 
 ### Consumer Beta - Received Messages (port 8082)
 
 ### Get all messages received by consumer-beta
 GET http://localhost:8082/received
 
-### Get orders received by consumer-beta (virtual topic - should match consumer-alpha's orders)
+### Get orders received by consumer-beta (virtual topic - should match consumer-alpha-1's orders)
 GET http://localhost:8082/received?destination=topic:orders
 
 ### Get messages received by consumer-beta filtered by destination
@@ -195,7 +207,7 @@ DELETE http://localhost:8082/received
 ### DLQ Management
 ### Both endpoints purge the same ActiveMQ.DLQ on the broker - use either
 
-### Purge the DLQ (via consumer-alpha)
+### Purge the DLQ (via consumer-alpha-1)
 DELETE http://localhost:8081/dlq
 
 ### Purge the DLQ (via consumer-beta)
@@ -206,8 +218,11 @@ DELETE http://localhost:8082/dlq
 ### Producer health check (includes ActiveMQ Producer Stats and dead-letter-queue)
 GET http://localhost:8090/healthcheck
 
-### Consumer-alpha health check (includes ActiveMQ Consumer Stats and dead-letter-queue)
+### Consumer-alpha-1 health check (includes ActiveMQ Consumer Stats and dead-letter-queue)
 GET http://localhost:8091/healthcheck
+
+### Consumer-alpha-2 health check (includes ActiveMQ Consumer Stats and dead-letter-queue)
+GET http://localhost:8093/healthcheck
 
 ### Consumer-beta health check (includes ActiveMQ Consumer Stats)
 GET http://localhost:8092/healthcheck

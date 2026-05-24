@@ -39,16 +39,17 @@ docker compose up --build
 |---|---|---|
 | ActiveMQ | 61616 (TCP), 8161 (UI) | — |
 | producer | 8080 | 8090 |
-| consumer-alpha | 8081 | 8091 |
+| consumer-alpha-1 | 8081 | 8091 |
+| consumer-alpha-2 | 8083 | 8093 |
 | consumer-beta | 8082 | 8092 |
 
 ## Message Topology
 
 | Destination | Type | Producer | Consumers | Behavior |
 |---|---|---|---|---|
-| `topic:orders` | Virtual topic | producer-service | consumer-alpha, consumer-beta | Each subscriber gets its own independent durable queue copy; alpha via `Consumer.consumer-alpha.VirtualTopic.orders`, beta via `Consumer.consumer-beta.VirtualTopic.orders` |
-| `fixedtopic:announcements` | Plain JMS topic | producer-service | consumer-alpha, consumer-beta | Every subscriber receives every message |
-| `queue:notifications` | Queue | producer-service | consumer-alpha, consumer-beta | Competing consumers — each message delivered to exactly one instance |
+| `topic:orders` | Virtual topic | producer-service | consumer-alpha-1, consumer-alpha-2, consumer-beta | Alpha instances compete (only one gets each message); beta gets every message independently via its own durable queue |
+| `fixedtopic:announcements` | Plain JMS topic | producer-service | consumer-alpha-1, consumer-alpha-2, consumer-beta | Every subscriber receives every message |
+| `queue:notifications` | Queue | producer-service | consumer-alpha-1, consumer-alpha-2, consumer-beta | Competing consumers — each message delivered to exactly one instance |
 | `queue:all_events` | Queue | producer-service (side effect) | consumer-beta | Receives a copy of every message sent with `sendToAllEventsQueue: true` |
 | `queue:poison_pill` | Queue | producer-service | none | No consumer; messages expire after 30s TTL and move to `ActiveMQ.DLQ` |
 
