@@ -144,6 +144,9 @@ unhealthy once the message appears there.
 
 Returns all received messages. Optional `?destination=topic:orders` filter.
 
+`instanceId` is included when set via the `instanceId` config property (or `INSTANCE_ID` environment
+variable). It is omitted when not configured — useful for single-instance services like consumer-beta.
+
 ```json
 {
   "serviceName": "consumer-alpha",
