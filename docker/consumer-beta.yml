@@ -15,6 +15,7 @@ activeMq:
   consumers:
     - queue:all_events
     - fixedtopic:announcements
+    - queue:notifications
   healthConfig:
     jmxUser: admin
     jmxCred: admin

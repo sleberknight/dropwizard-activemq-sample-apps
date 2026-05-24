@@ -16,6 +16,7 @@ activeMq:
   producers:
     - topic:orders
     - fixedtopic:announcements
+    - queue:notifications
     - queue:poison_pill
   healthConfig:
     jmxUser: admin
