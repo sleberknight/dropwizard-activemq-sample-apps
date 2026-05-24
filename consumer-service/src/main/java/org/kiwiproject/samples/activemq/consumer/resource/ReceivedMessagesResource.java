@@ -28,7 +28,7 @@ public class ReceivedMessagesResource {
     @GET
     public ReceivedMessagesResponse getReceived(@QueryParam("destination") String destination) {
         var messages = nonNull(destination) ? store.getByDestination(destination) : store.getAll();
-        return new ReceivedMessagesResponse(serviceName, instanceId, messages);
+        return ReceivedMessagesResponse.of(serviceName, instanceId, messages);
     }
 
     @DELETE

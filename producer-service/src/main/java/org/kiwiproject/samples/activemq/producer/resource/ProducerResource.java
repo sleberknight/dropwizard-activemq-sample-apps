@@ -47,6 +47,6 @@ public class ProducerResource {
             }
         }
 
-        return Response.ok(new ProduceResponse(serviceName, request.getCount(), destination, request.isSendToAllEventsQueue())).build();
+        return Response.ok(ProduceResponse.of(serviceName, request.getCount(), destination, request.isSendToAllEventsQueue())).build();
     }
 }
