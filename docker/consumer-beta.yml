@@ -13,6 +13,7 @@ activeMq:
   useSecureActiveMQConnections: false
   useSecureRestConnections: false
   consumers:
+    - topic:orders
     - queue:all_events
     - fixedtopic:announcements
     - queue:notifications

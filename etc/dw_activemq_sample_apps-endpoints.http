@@ -1,6 +1,7 @@
 ### Producer - Virtual Topic (topic:orders)
-### consumer-alpha receives via Consumer.consumer-alpha.VirtualTopic.orders
-### consumer-beta receives via queue:all_events when sendToAllEventsQueue is true
+### Both consumer-alpha and consumer-beta receive every message independently via their own durable queues
+### (Consumer.consumer-alpha.VirtualTopic.orders and Consumer.consumer-beta.VirtualTopic.orders)
+### consumer-beta also receives a copy via queue:all_events when sendToAllEventsQueue is true
 
 ### Post JSON (current format) - sendToAllEventsQueue: true
 POST http://localhost:8080/produce
@@ -178,6 +179,9 @@ DELETE http://localhost:8081/received
 
 ### Get all messages received by consumer-beta
 GET http://localhost:8082/received
+
+### Get orders received by consumer-beta (virtual topic - should match consumer-alpha's orders)
+GET http://localhost:8082/received?destination=topic:orders
 
 ### Get messages received by consumer-beta filtered by destination
 GET http://localhost:8082/received?destination=queue:notifications
