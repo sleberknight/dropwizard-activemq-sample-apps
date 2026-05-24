@@ -1,4 +1,4 @@
-# dw-activemq-sample-apps
+# dropwizard-activemq-sample-apps
 
 Sample Dropwizard services for functional testing of dropwizard-activemq before release.
 
@@ -37,7 +37,7 @@ mvn install -DskipTests
 **2. Build the fat JARs:**
 
 ```bash
-cd dw-activemq-sample-apps
+cd /path/to/dropwizard-activemq-sample-apps
 mvn package -DskipTests
 ```
 
