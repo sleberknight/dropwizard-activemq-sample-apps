@@ -4,8 +4,32 @@ updates:
     directory: /
     schedule:
       interval: weekly
+    groups:
+      dev-deps:
+        dependency-type: development
+        update-types:
+          - minor
+          - patch
+      prod-deps:
+        dependency-type: production
+        update-types:
+          - minor
+          - patch
+    assignees:
+      - sleberknight
+    open-pull-requests-limit: 10
+    commit-message:
+      prefix: "chore(deps)"
 
   - package-ecosystem: docker
     directory: /docker
     schedule:
       interval: weekly
+    groups:
+      docker-deps:
+        patterns:
+          - "*"
+    assignees:
+      - sleberknight
+    commit-message:
+      prefix: "chore(deps)"
