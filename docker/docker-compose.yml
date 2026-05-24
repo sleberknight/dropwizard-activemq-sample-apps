@@ -35,6 +35,8 @@ services:
       - "8091:8081"
     volumes:
       - ./consumer-alpha.yml:/config/app.yml
+    environment:
+      - INSTANCE_ID=consumer-alpha-1
     command: server /config/app.yml
     depends_on:
       activemq:
@@ -48,6 +50,8 @@ services:
       - "8093:8081"
     volumes:
       - ./consumer-alpha.yml:/config/app.yml
+    environment:
+      - INSTANCE_ID=consumer-alpha-2
     command: server /config/app.yml
     depends_on:
       activemq:

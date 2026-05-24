@@ -7,5 +7,6 @@ import java.util.List;
 @Value
 public class ReceivedMessagesResponse {
     String serviceName;
+    String instanceId;
     List<ReceivedMessage> messages;
 }

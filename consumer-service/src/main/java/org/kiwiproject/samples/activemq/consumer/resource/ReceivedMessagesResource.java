@@ -16,17 +16,19 @@ import org.kiwiproject.samples.activemq.consumer.store.ReceivedMessageStore;
 public class ReceivedMessagesResource {
 
     private final String serviceName;
+    private final String instanceId;
     private final ReceivedMessageStore store;
 
-    public ReceivedMessagesResource(String serviceName, ReceivedMessageStore store) {
+    public ReceivedMessagesResource(String serviceName, String instanceId, ReceivedMessageStore store) {
         this.serviceName = serviceName;
+        this.instanceId = instanceId;
         this.store = store;
     }
 
     @GET
     public ReceivedMessagesResponse getReceived(@QueryParam("destination") String destination) {
         var messages = nonNull(destination) ? store.getByDestination(destination) : store.getAll();
-        return new ReceivedMessagesResponse(serviceName, messages);
+        return new ReceivedMessagesResponse(serviceName, instanceId, messages);
     }
 
     @DELETE

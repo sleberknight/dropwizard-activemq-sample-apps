@@ -17,6 +17,8 @@ public class ConsumerConfig extends Configuration implements ActiveMqConfigured 
     @NotBlank
     private String serviceName;
 
+    private String instanceId;
+
     @Valid
     @NotNull
     @JsonProperty("activeMq")

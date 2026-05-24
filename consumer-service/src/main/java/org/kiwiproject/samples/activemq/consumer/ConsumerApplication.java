@@ -37,7 +37,7 @@ public class ConsumerApplication extends Application<ConsumerConfig> {
                     new DeadLetterQueueHealthCheck(config.getActiveMqConfig()));
         }
 
-        environment.jersey().register(new ReceivedMessagesResource(config.getServiceName(), store));
+        environment.jersey().register(new ReceivedMessagesResource(config.getServiceName(), config.getInstanceId(), store));
         environment.jersey().register(new DlqResource(config.getActiveMqConfig()));
     }
 }
