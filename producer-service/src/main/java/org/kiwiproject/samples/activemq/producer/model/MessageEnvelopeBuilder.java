@@ -1,10 +1,14 @@
 package org.kiwiproject.samples.activemq.producer.model;
 
+import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class MessageEnvelopeBuilder {
 
+    private static final String MESSAGE_TYPE = "messageType";
     private final ObjectMapper mapper;
 
     public MessageEnvelopeBuilder(ObjectMapper mapper) {
@@ -23,8 +27,8 @@ public class MessageEnvelopeBuilder {
 
     private String buildJsonCurrent(ProduceRequest request) {
         ObjectNode envelope = mapper.createObjectNode();
-        envelope.put("messageType", request.getMessageType());
-        if (request.getData() != null) {
+        envelope.put(MESSAGE_TYPE, request.getMessageType());
+        if (nonNull(request.getData())) {
             envelope.set("data", request.getData());
         }
         return envelope.toString();
@@ -35,7 +39,7 @@ public class MessageEnvelopeBuilder {
         ObjectNode metaData = mapper.createObjectNode();
         metaData.put("type", request.getMessageType());
         envelope.set("metaData", metaData);
-        if (request.getData() != null) {
+        if (nonNull(request.getData())) {
             envelope.set("data", request.getData());
         }
         return envelope.toString();
@@ -43,12 +47,12 @@ public class MessageEnvelopeBuilder {
 
     private String buildJsonEchoedCurrent(ProduceRequest request) {
         ObjectNode inner = mapper.createObjectNode();
-        inner.put("messageType", request.getMessageType());
-        if (request.getData() != null) {
+        inner.put(MESSAGE_TYPE, request.getMessageType());
+        if (nonNull(request.getData())) {
             inner.set("data", request.getData());
         }
         ObjectNode envelope = mapper.createObjectNode();
-        envelope.put("messageType", "ECHO_MESSAGE");
+        envelope.put(MESSAGE_TYPE, "ECHO_MESSAGE");
         envelope.set("echoedMessage", inner);
         return envelope.toString();
     }
@@ -58,17 +62,17 @@ public class MessageEnvelopeBuilder {
         metaData.put("type", request.getMessageType());
         ObjectNode inner = mapper.createObjectNode();
         inner.set("metaData", metaData);
-        if (request.getData() != null) {
+        if (nonNull(request.getData())) {
             inner.set("data", request.getData());
         }
         ObjectNode envelope = mapper.createObjectNode();
-        envelope.put("messageType", "ECHO_MESSAGE");
+        envelope.put(MESSAGE_TYPE, "ECHO_MESSAGE");
         envelope.set("echoedMessage", inner);
         return envelope.toString();
     }
 
     private static String textPayload(ProduceRequest request) {
-        if (request.getData() == null) {
+        if (isNull(request.getData())) {
             return "";
         }
         return request.getData().isTextual() ? request.getData().asText() : request.getData().toString();
