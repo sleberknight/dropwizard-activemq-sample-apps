@@ -1,5 +1,6 @@
 package org.kiwiproject.samples.activemq.consumer;
 
+import io.dropwizard.client.JerseyClientBuilder;
 import io.dropwizard.configuration.EnvironmentVariableSubstitutor;
 import io.dropwizard.configuration.SubstitutingSourceProvider;
 import io.dropwizard.core.Application;
@@ -42,7 +43,9 @@ public class ConsumerApplication extends Application<ConsumerConfig> {
                     new DeadLetterQueueHealthCheck(config.getActiveMqConfig()));
         }
 
+        var jolokiaClient = new JerseyClientBuilder(environment).build("jolokia-client");
+
         environment.jersey().register(new ReceivedMessagesResource(config.getServiceName(), config.getInstanceId(), store));
-        environment.jersey().register(new DlqResource(config.getActiveMqConfig()));
+        environment.jersey().register(new DlqResource(config.getActiveMqConfig(), jolokiaClient));
     }
 }

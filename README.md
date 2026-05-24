@@ -92,7 +92,8 @@ Response:
   "serviceName": "producer-service",
   "sent": 1,
   "destination": "topic:orders",
-  "sentToAllEventsQueue": true
+  "sentToAllEventsQueue": true,
+  "respondedAt": "2026-05-24T19:13:32-04:00"
 }
 ```
 
@@ -170,7 +171,8 @@ variable). It is omitted when not configured — useful for single-instance serv
       "contentType": "JSON",
       "receivedAt": "2026-05-23T14:30:00Z"
     }
-  ]
+  ],
+  "respondedAt": "2026-05-24T19:13:32-04:00"
 }
 ```
 
