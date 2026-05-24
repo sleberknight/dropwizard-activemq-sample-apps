@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import org.jspecify.annotations.NonNull;
 import org.kiwiproject.dropwizard.activemq.config.ActiveMqConfig;
 import org.kiwiproject.dropwizard.activemq.config.ActiveMqConfigured;
 
@@ -22,6 +23,7 @@ public class ProducerConfig extends Configuration implements ActiveMqConfigured 
     @JsonProperty("activeMq")
     private ActiveMqConfig activeMqConfig = new ActiveMqConfig();
 
+    @NonNull
     @Override
     public ActiveMqConfig getActiveMqConfig() {
         return activeMqConfig;

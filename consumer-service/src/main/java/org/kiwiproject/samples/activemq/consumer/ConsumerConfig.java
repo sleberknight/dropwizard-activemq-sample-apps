@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import org.jspecify.annotations.NonNull;
 import org.kiwiproject.dropwizard.activemq.config.ActiveMqConfig;
 import org.kiwiproject.dropwizard.activemq.config.ActiveMqConfigured;
 
@@ -26,6 +27,7 @@ public class ConsumerConfig extends Configuration implements ActiveMqConfigured 
 
     private boolean registerDlqHealthCheck = false;
 
+    @NonNull
     @Override
     public ActiveMqConfig getActiveMqConfig() {
         return activeMqConfig;
