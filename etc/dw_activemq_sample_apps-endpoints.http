@@ -1,11 +1,19 @@
-### Post JSON (current format) to a virtual topic
+# =============================================================================
+# Producer - Virtual Topic (topic:orders)
+#
+# consumer-alpha receives each message via its own durable queue
+# (Consumer.consumer-alpha.VirtualTopic.orders).
+# consumer-beta receives a copy via queue:all_events when
+# sendToAllEventsQueue is true.
+# =============================================================================
+
+### Post JSON (current format) - sendToAllEventsQueue: true
 POST http://localhost:8080/produce
 Content-Type: application/json
 
 {
   "destination": "topic:orders",
   "sendToAllEventsQueue": true,
-  "count": 1,
   "format": "JSON_CURRENT",
   "messageType": "ORDER_PLACED",
   "data": {
@@ -14,7 +22,7 @@ Content-Type: application/json
   }
 }
 
-### Post JSON (legacy format) to a virtual topic
+### Post JSON (legacy format) - sendToAllEventsQueue: true
 POST http://localhost:8080/produce
 Content-Type: application/json
 
@@ -29,7 +37,7 @@ Content-Type: application/json
   }
 }
 
-### Post JSON (echoed current format) to a virtual topic
+### Post JSON (echoed current format)
 POST http://localhost:8080/produce
 Content-Type: application/json
 
@@ -44,7 +52,7 @@ Content-Type: application/json
   }
 }
 
-### Post JSON (echoed legacy format) to a virtual topic
+### Post JSON (echoed legacy format)
 POST http://localhost:8080/produce
 Content-Type: application/json
 
@@ -59,7 +67,7 @@ Content-Type: application/json
   }
 }
 
-### Post XML to a virtual topic
+### Post XML
 POST http://localhost:8080/produce
 Content-Type: application/json
 
@@ -70,7 +78,7 @@ Content-Type: application/json
   "data": "<order><id>123</id></order>"
 }
 
-### Post TEXT to a virtual topic
+### Post TEXT
 POST http://localhost:8080/produce
 Content-Type: application/json
 
@@ -81,7 +89,7 @@ Content-Type: application/json
   "data": "plain text order message"
 }
 
-### Post BYTES to a virtual topic
+### Post BYTES
 POST http://localhost:8080/produce
 Content-Type: application/json
 
@@ -92,7 +100,13 @@ Content-Type: application/json
   "data": "bytes order message"
 }
 
-### Post JSON to a plain JMS topic (fan-out: both consumer-alpha and consumer-beta receive it)
+# =============================================================================
+# Producer - Plain JMS Topic (fixedtopic:announcements)
+#
+# Both consumer-alpha and consumer-beta receive every message (fan-out).
+# =============================================================================
+
+### Post JSON to plain JMS topic
 POST http://localhost:8080/produce
 Content-Type: application/json
 
@@ -106,7 +120,14 @@ Content-Type: application/json
   }
 }
 
-### Post JSON to a regular queue (competing consumers: only one of alpha or beta receives it)
+# =============================================================================
+# Producer - Regular Queue (queue:notifications)
+#
+# Both consumer-alpha and consumer-beta compete for messages. Each message
+# is delivered to exactly one instance. Send multiple to observe distribution.
+# =============================================================================
+
+### Post a single notification
 POST http://localhost:8080/produce
 Content-Type: application/json
 
@@ -121,7 +142,7 @@ Content-Type: application/json
   }
 }
 
-### Post multiple messages to the notifications queue to observe competing consumer behavior
+### Post multiple notifications to observe competing consumer behavior
 POST http://localhost:8080/produce
 Content-Type: application/json
 
@@ -137,7 +158,15 @@ Content-Type: application/json
   }
 }
 
-### Post to the poison pill queue (no consumer; message expires after 30s TTL and moves to ActiveMQ.DLQ)
+# =============================================================================
+# Producer - DLQ Testing (queue:poison_pill)
+#
+# No consumer subscribes to this queue. Messages expire after the 30s TTL
+# and move to ActiveMQ.DLQ. The dead-letter-queue health check on
+# consumer-alpha will then report unhealthy.
+# =============================================================================
+
+### Post to poison pill queue
 POST http://localhost:8080/produce
 Content-Type: application/json
 
@@ -148,14 +177,25 @@ Content-Type: application/json
   "data": "this will expire"
 }
 
+# =============================================================================
+# Consumer Alpha - Received Messages (port 8081)
+# =============================================================================
+
 ### Get all messages received by consumer-alpha
 GET http://localhost:8081/received
 
 ### Get messages received by consumer-alpha filtered by destination
 GET http://localhost:8081/received?destination=topic:orders
 
+### Get announcements received by consumer-alpha
+GET http://localhost:8081/received?destination=fixedtopic:announcements
+
 ### Clear messages received by consumer-alpha
 DELETE http://localhost:8081/received
+
+# =============================================================================
+# Consumer Beta - Received Messages (port 8082)
+# =============================================================================
 
 ### Get all messages received by consumer-beta
 GET http://localhost:8082/received
@@ -163,8 +203,17 @@ GET http://localhost:8082/received
 ### Get messages received by consumer-beta filtered by destination
 GET http://localhost:8082/received?destination=queue:notifications
 
+### Get announcements received by consumer-beta
+GET http://localhost:8082/received?destination=fixedtopic:announcements
+
 ### Clear messages received by consumer-beta
 DELETE http://localhost:8082/received
+
+# =============================================================================
+# DLQ Management
+#
+# Both endpoints purge the same ActiveMQ.DLQ on the broker — use either.
+# =============================================================================
 
 ### Purge the DLQ (via consumer-alpha)
 DELETE http://localhost:8081/dlq
@@ -172,11 +221,15 @@ DELETE http://localhost:8081/dlq
 ### Purge the DLQ (via consumer-beta)
 DELETE http://localhost:8082/dlq
 
-### consumer-alpha health check
+# =============================================================================
+# Health Checks
+# =============================================================================
+
+### Producer health check (includes ActiveMQ Producer Stats and dead-letter-queue)
+GET http://localhost:8090/healthcheck
+
+### Consumer-alpha health check (includes ActiveMQ Consumer Stats and dead-letter-queue)
 GET http://localhost:8091/healthcheck
 
-### consumer-beta health check
+### Consumer-beta health check (includes ActiveMQ Consumer Stats)
 GET http://localhost:8092/healthcheck
-
-### producer health check
-GET http://localhost:8090/healthcheck

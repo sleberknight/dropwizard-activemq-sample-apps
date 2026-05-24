@@ -2,6 +2,8 @@
 
 Sample Dropwizard services for functional testing of dropwizard-activemq before release.
 
+An IntelliJ HTTP client file covering all endpoints is at [`etc/dw_activemq_sample_apps-endpoints.http`](etc/dw_activemq_sample_apps-endpoints.http).
+
 ## Prerequisites
 
 - Java 17
