@@ -1,0 +1,26 @@
+server:
+  applicationConnectors:
+    - type: http
+      port: 8080
+  adminConnectors:
+    - type: http
+      port: 8081
+
+serviceName: consumer-beta
+
+activeMq:
+  brokerUri: tcp://activemq:61616
+  useSecureActiveMQConnections: false
+  useSecureRestConnections: false
+  consumers:
+    - queue:all_events
+    - fixedtopic:announcements
+  healthConfig:
+    jmxUser: admin
+    jmxCred: admin
+
+logging:
+  level: INFO
+  loggers:
+    org.kiwiproject: DEBUG
+    org.apache.activemq: WARN

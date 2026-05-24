@@ -1,0 +1,30 @@
+server:
+  applicationConnectors:
+    - type: http
+      port: 8080
+  adminConnectors:
+    - type: http
+      port: 8081
+
+serviceName: producer-service
+
+activeMq:
+  brokerUri: tcp://activemq:61616
+  useSecureActiveMQConnections: false
+  useSecureRestConnections: false
+  timeToLive: 30s
+  producers:
+    - topic:orders
+    - fixedtopic:announcements
+    - queue:poison_pill
+  healthConfig:
+    jmxUser: admin
+    jmxCred: admin
+    ignoredDestinations:
+      - queue:poison_pill
+
+logging:
+  level: INFO
+  loggers:
+    org.kiwiproject: DEBUG
+    org.apache.activemq: WARN

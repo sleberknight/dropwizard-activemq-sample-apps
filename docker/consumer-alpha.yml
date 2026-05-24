@@ -1,0 +1,28 @@
+server:
+  applicationConnectors:
+    - type: http
+      port: 8080
+  adminConnectors:
+    - type: http
+      port: 8081
+
+serviceName: consumer-alpha
+
+activeMq:
+  brokerUri: tcp://activemq:61616
+  useSecureActiveMQConnections: false
+  useSecureRestConnections: false
+  consumers:
+    - topic:orders
+    - fixedtopic:announcements
+  healthConfig:
+    jmxUser: admin
+    jmxCred: admin
+
+registerDlqHealthCheck: true
+
+logging:
+  level: INFO
+  loggers:
+    org.kiwiproject: DEBUG
+    org.apache.activemq: WARN

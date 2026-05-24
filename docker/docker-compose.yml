@@ -1,0 +1,54 @@
+services:
+  activemq:
+    image: apache/activemq-classic:5.19.2
+    ports:
+      - "61616:61616"
+      - "8161:8161"
+    volumes:
+      - ./jolokia-access.xml:/opt/apache-activemq/conf/jolokia-access.xml
+      - ./jetty.xml:/opt/apache-activemq/conf/jetty.xml
+    healthcheck:
+      test: ["CMD-SHELL", "bash -c '</dev/tcp/localhost/61616'"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 15s
+
+  producer:
+    build:
+      context: ../producer-service
+    ports:
+      - "8080:8080"
+      - "8090:8081"
+    volumes:
+      - ./producer.yml:/config/app.yml
+    command: server /config/app.yml
+    depends_on:
+      activemq:
+        condition: service_healthy
+
+  consumer-alpha:
+    build:
+      context: ../consumer-service
+    ports:
+      - "8081:8080"
+      - "8091:8081"
+    volumes:
+      - ./consumer-alpha.yml:/config/app.yml
+    command: server /config/app.yml
+    depends_on:
+      activemq:
+        condition: service_healthy
+
+  consumer-beta:
+    build:
+      context: ../consumer-service
+    ports:
+      - "8082:8080"
+      - "8092:8081"
+    volumes:
+      - ./consumer-beta.yml:/config/app.yml
+    command: server /config/app.yml
+    depends_on:
+      activemq:
+        condition: service_healthy
