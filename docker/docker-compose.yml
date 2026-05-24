@@ -46,8 +46,8 @@ services:
     build:
       context: ../consumer-service
     ports:
-      - "8083:8080"
-      - "8093:8081"
+      - "8082:8080"
+      - "8092:8081"
     volumes:
       - ./consumer-alpha.yml:/config/app.yml
     environment:
@@ -61,8 +61,8 @@ services:
     build:
       context: ../consumer-service
     ports:
-      - "8082:8080"
-      - "8092:8081"
+      - "8083:8080"
+      - "8093:8081"
     volumes:
       - ./consumer-beta.yml:/config/app.yml
     command: server /config/app.yml

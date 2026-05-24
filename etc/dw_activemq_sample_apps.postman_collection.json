@@ -201,20 +201,60 @@
       ]
     },
     {
-      "name": "Consumer Alpha-2 - Received Messages (port 8083)",
+      "name": "Consumer Alpha-2 - Received Messages (port 8082)",
       "item": [
         {
           "name": "Get all messages",
           "request": {
             "method": "GET",
-            "url": { "raw": "http://localhost:8083/received", "protocol": "http", "host": ["localhost"], "port": "8083", "path": ["received"] }
+            "url": { "raw": "http://localhost:8082/received", "protocol": "http", "host": ["localhost"], "port": "8082", "path": ["received"] }
           }
         },
         {
           "name": "Get orders (should be disjoint from alpha-1's orders)",
           "request": {
             "method": "GET",
+            "url": { "raw": "http://localhost:8082/received?destination=topic:orders", "protocol": "http", "host": ["localhost"], "port": "8082", "path": ["received"], "query": [{ "key": "destination", "value": "topic:orders" }] }
+          }
+        },
+        {
+          "name": "Clear messages",
+          "request": {
+            "method": "DELETE",
+            "url": { "raw": "http://localhost:8082/received", "protocol": "http", "host": ["localhost"], "port": "8082", "path": ["received"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Consumer Beta - Received Messages (port 8083)",
+      "item": [
+        {
+          "name": "Get all messages",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "http://localhost:8083/received", "protocol": "http", "host": ["localhost"], "port": "8083", "path": ["received"] }
+          }
+        },
+        {
+          "name": "Get orders received by consumer-beta",
+          "request": {
+            "method": "GET",
             "url": { "raw": "http://localhost:8083/received?destination=topic:orders", "protocol": "http", "host": ["localhost"], "port": "8083", "path": ["received"], "query": [{ "key": "destination", "value": "topic:orders" }] }
+          }
+        },
+        {
+          "name": "Get messages filtered by queue:notifications",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "http://localhost:8083/received?destination=queue:notifications", "protocol": "http", "host": ["localhost"], "port": "8083", "path": ["received"], "query": [{ "key": "destination", "value": "queue:notifications" }] }
+          }
+        },
+        {
+          "name": "Get messages filtered by fixedtopic:announcements",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "http://localhost:8083/received?destination=fixedtopic:announcements", "protocol": "http", "host": ["localhost"], "port": "8083", "path": ["received"], "query": [{ "key": "destination", "value": "fixedtopic:announcements" }] }
           }
         },
         {
@@ -222,46 +262,6 @@
           "request": {
             "method": "DELETE",
             "url": { "raw": "http://localhost:8083/received", "protocol": "http", "host": ["localhost"], "port": "8083", "path": ["received"] }
-          }
-        }
-      ]
-    },
-    {
-      "name": "Consumer Beta - Received Messages (port 8082)",
-      "item": [
-        {
-          "name": "Get all messages",
-          "request": {
-            "method": "GET",
-            "url": { "raw": "http://localhost:8082/received", "protocol": "http", "host": ["localhost"], "port": "8082", "path": ["received"] }
-          }
-        },
-        {
-          "name": "Get orders received by consumer-beta",
-          "request": {
-            "method": "GET",
-            "url": { "raw": "http://localhost:8082/received?destination=topic:orders", "protocol": "http", "host": ["localhost"], "port": "8082", "path": ["received"], "query": [{ "key": "destination", "value": "topic:orders" }] }
-          }
-        },
-        {
-          "name": "Get messages filtered by queue:notifications",
-          "request": {
-            "method": "GET",
-            "url": { "raw": "http://localhost:8082/received?destination=queue:notifications", "protocol": "http", "host": ["localhost"], "port": "8082", "path": ["received"], "query": [{ "key": "destination", "value": "queue:notifications" }] }
-          }
-        },
-        {
-          "name": "Get messages filtered by fixedtopic:announcements",
-          "request": {
-            "method": "GET",
-            "url": { "raw": "http://localhost:8082/received?destination=fixedtopic:announcements", "protocol": "http", "host": ["localhost"], "port": "8082", "path": ["received"], "query": [{ "key": "destination", "value": "fixedtopic:announcements" }] }
-          }
-        },
-        {
-          "name": "Clear messages",
-          "request": {
-            "method": "DELETE",
-            "url": { "raw": "http://localhost:8082/received", "protocol": "http", "host": ["localhost"], "port": "8082", "path": ["received"] }
           }
         }
       ]
@@ -280,7 +280,7 @@
           "name": "Purge the DLQ (via consumer-beta)",
           "request": {
             "method": "DELETE",
-            "url": { "raw": "http://localhost:8082/dlq", "protocol": "http", "host": ["localhost"], "port": "8082", "path": ["dlq"] }
+            "url": { "raw": "http://localhost:8083/dlq", "protocol": "http", "host": ["localhost"], "port": "8083", "path": ["dlq"] }
           }
         }
       ]
@@ -306,14 +306,14 @@
           "name": "Consumer-alpha-2 health check",
           "request": {
             "method": "GET",
-            "url": { "raw": "http://localhost:8093/healthcheck", "protocol": "http", "host": ["localhost"], "port": "8093", "path": ["healthcheck"] }
+            "url": { "raw": "http://localhost:8092/healthcheck", "protocol": "http", "host": ["localhost"], "port": "8092", "path": ["healthcheck"] }
           }
         },
         {
           "name": "Consumer-beta health check",
           "request": {
             "method": "GET",
-            "url": { "raw": "http://localhost:8092/healthcheck", "protocol": "http", "host": ["localhost"], "port": "8092", "path": ["healthcheck"] }
+            "url": { "raw": "http://localhost:8093/healthcheck", "protocol": "http", "host": ["localhost"], "port": "8093", "path": ["healthcheck"] }
           }
         }
       ]

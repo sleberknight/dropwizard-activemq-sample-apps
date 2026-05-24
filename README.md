@@ -44,8 +44,8 @@ docker compose up --build
 | ActiveMQ | 61616 (TCP), 8161 (UI) | — |
 | producer | 8080 | 8090 |
 | consumer-alpha-1 | 8081 | 8091 |
-| consumer-alpha-2 | 8083 | 8093 |
-| consumer-beta | 8082 | 8092 |
+| consumer-alpha-2 | 8082 | 8092 |
+| consumer-beta | 8083 | 8093 |
 
 ## Message Topology
 
@@ -176,7 +176,7 @@ testing DLQ behavior so the `dead-letter-queue` health check returns to healthy.
 
 - Producer: `http://localhost:8090/healthcheck` — includes `dead-letter-queue` check
 - Consumer Alpha: `http://localhost:8091/healthcheck` — includes `dead-letter-queue` check
-- Consumer Beta: `http://localhost:8092/healthcheck`
+- Consumer Beta: `http://localhost:8093/healthcheck`
 
 ## ActiveMQ Admin UI
 

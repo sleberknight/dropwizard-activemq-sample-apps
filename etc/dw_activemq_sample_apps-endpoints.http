@@ -175,34 +175,34 @@ GET http://localhost:8081/received?destination=fixedtopic:announcements
 ### Clear messages received by consumer-alpha-1
 DELETE http://localhost:8081/received
 
-### Consumer Alpha-2 - Received Messages (port 8083)
+### Consumer Alpha-2 - Received Messages (port 8082)
 ### Same serviceName as alpha-1; compare with alpha-1 to verify virtual topic competing consumer behavior
 
 ### Get all messages received by consumer-alpha-2
-GET http://localhost:8083/received
-
-### Get orders received by consumer-alpha-2 (should be disjoint from alpha-1's orders)
-GET http://localhost:8083/received?destination=topic:orders
-
-### Clear messages received by consumer-alpha-2
-DELETE http://localhost:8083/received
-
-### Consumer Beta - Received Messages (port 8082)
-
-### Get all messages received by consumer-beta
 GET http://localhost:8082/received
 
-### Get orders received by consumer-beta (virtual topic - should match consumer-alpha-1's orders)
+### Get orders received by consumer-alpha-2 (should be disjoint from alpha-1's orders)
 GET http://localhost:8082/received?destination=topic:orders
 
+### Clear messages received by consumer-alpha-2
+DELETE http://localhost:8082/received
+
+### Consumer Beta - Received Messages (port 8083)
+
+### Get all messages received by consumer-beta
+GET http://localhost:8083/received
+
+### Get orders received by consumer-beta (virtual topic - should match consumer-alpha-1's orders)
+GET http://localhost:8083/received?destination=topic:orders
+
 ### Get messages received by consumer-beta filtered by destination
-GET http://localhost:8082/received?destination=queue:notifications
+GET http://localhost:8083/received?destination=queue:notifications
 
 ### Get announcements received by consumer-beta
-GET http://localhost:8082/received?destination=fixedtopic:announcements
+GET http://localhost:8083/received?destination=fixedtopic:announcements
 
 ### Clear messages received by consumer-beta
-DELETE http://localhost:8082/received
+DELETE http://localhost:8083/received
 
 ### DLQ Management
 ### Both endpoints purge the same ActiveMQ.DLQ on the broker - use either
@@ -211,7 +211,7 @@ DELETE http://localhost:8082/received
 DELETE http://localhost:8081/dlq
 
 ### Purge the DLQ (via consumer-beta)
-DELETE http://localhost:8082/dlq
+DELETE http://localhost:8083/dlq
 
 ### Health Checks
 
@@ -222,7 +222,7 @@ GET http://localhost:8090/healthcheck
 GET http://localhost:8091/healthcheck
 
 ### Consumer-alpha-2 health check (includes ActiveMQ Consumer Stats and dead-letter-queue)
-GET http://localhost:8093/healthcheck
+GET http://localhost:8092/healthcheck
 
 ### Consumer-beta health check (includes ActiveMQ Consumer Stats)
-GET http://localhost:8092/healthcheck
+GET http://localhost:8093/healthcheck
