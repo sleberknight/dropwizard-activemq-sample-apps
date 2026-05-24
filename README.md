@@ -93,6 +93,7 @@ Response:
 | `BYTES` | `data` sent as BytesMessage (pass string as `"data"` value, UTF-8 encoded) |
 
 For BYTES format, `sendToAllEventsQueue` is ignored — bytes go to the specified destination only.
+When a consumer receives a BYTES message, `rawPayload` in the response is base64-encoded.
 
 ### Example: send an XML message
 
