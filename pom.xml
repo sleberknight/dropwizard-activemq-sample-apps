@@ -22,9 +22,9 @@
 
         <dropwizard-activemq.version>0.5.0</dropwizard-activemq.version>
         <kiwi-bom.version>3.2.0</kiwi-bom.version>
-        <lombok.version>1.18.36</lombok.version>
+        <lombok.version>1.18.46</lombok.version>
         <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
-        <maven-shade-plugin.version>3.6.0</maven-shade-plugin.version>
+        <maven-shade-plugin.version>3.6.2</maven-shade-plugin.version>
     </properties>
 
     <dependencyManagement>
