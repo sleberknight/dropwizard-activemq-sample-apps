@@ -166,6 +166,7 @@ variable). It is omitted when not configured — useful for single-instance serv
 {
   "serviceName": "consumer-alpha",
   "instanceId": "consumer-alpha-1",
+  "messageCount": 1,
   "messages": [
     {
       "destination": "topic:orders",

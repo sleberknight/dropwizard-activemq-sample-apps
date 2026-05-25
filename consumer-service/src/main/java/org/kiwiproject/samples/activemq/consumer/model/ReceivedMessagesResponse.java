@@ -13,6 +13,10 @@ public record ReceivedMessagesResponse(
         List<ReceivedMessage> messages,
         String respondedAt
 ) {
+    public int messageCount() {
+        return messages.size();
+    }
+
     public static ReceivedMessagesResponse of(String serviceName, String instanceId, List<ReceivedMessage> messages) {
         return new ReceivedMessagesResponse(serviceName, instanceId, messages,
                 DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(OffsetDateTime.now()));
