@@ -6,6 +6,7 @@ Sample Dropwizard services for functional testing of dropwizard-activemq before 
 
 API collections covering all endpoints are in the `etc/` directory:
 
+- curl script: [`etc/curl-endpoints.sh`](etc/curl-endpoints.sh) — interactive menu-driven client, useful in Codespaces or anywhere without a GUI tool
 - IntelliJ HTTP client: [`etc/dw_activemq_sample_apps-endpoints.http`](etc/dw_activemq_sample_apps-endpoints.http)
 - Postman collection: [`etc/dw_activemq_sample_apps.postman_collection.json`](etc/dw_activemq_sample_apps.postman_collection.json)
 - Bruno collection: [`etc/bruno/`](etc/bruno/) (open the `etc/bruno` folder in Bruno)
