@@ -1,0 +1,18 @@
+{
+  "name": "dropwizard-activemq-sample-apps",
+  "image": "mcr.microsoft.com/devcontainers/java:17-bullseye",
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {},
+    "ghcr.io/devcontainers/features/maven:1": {
+      "version": "3.9"
+    }
+  },
+  "postCreateCommand": "mvn -f ${containerWorkspaceFolder}/pom.xml dependency:resolve -q",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "vscjava.vscode-java-pack"
+      ]
+    }
+  }
+}
