@@ -50,13 +50,14 @@ show_menu() {
     echo " 10) DELETE /received — clear consumer-alpha-1 messages"
     echo " 11) DELETE /received — clear consumer-alpha-2 messages"
     echo " 12) DELETE /received — clear consumer-beta messages"
-    echo " 13) DELETE /dlq — purge ActiveMQ.DLQ (resets dead-letter-queue health check)"
+    echo " 13) DELETE /received — clear ALL consumers"
+    echo " 14) DELETE /dlq — purge ActiveMQ.DLQ (resets dead-letter-queue health check)"
     echo ""
     section "Health checks"
-    echo " 14) GET /healthcheck — producer"
-    echo " 15) GET /healthcheck — consumer-alpha-1"
-    echo " 16) GET /healthcheck — consumer-alpha-2"
-    echo " 17) GET /healthcheck — consumer-beta"
+    echo " 15) GET /healthcheck — producer"
+    echo " 16) GET /healthcheck — consumer-alpha-1"
+    echo " 17) GET /healthcheck — consumer-alpha-2"
+    echo " 18) GET /healthcheck — consumer-beta"
     echo ""
     echo "  q) Quit"
     echo ""
@@ -145,23 +146,32 @@ while true; do
                 -X DELETE "${CONSUMER_BETA_URL}/received"
             ;;
         13)
+            header "Clear received messages — ALL consumers"
+            run_curl "DELETE ${CONSUMER_ALPHA_1_URL}/received" \
+                -X DELETE "${CONSUMER_ALPHA_1_URL}/received"
+            run_curl "DELETE ${CONSUMER_ALPHA_2_URL}/received" \
+                -X DELETE "${CONSUMER_ALPHA_2_URL}/received"
+            run_curl "DELETE ${CONSUMER_BETA_URL}/received" \
+                -X DELETE "${CONSUMER_BETA_URL}/received"
+            ;;
+        14)
             header "Purge ActiveMQ.DLQ"
             run_curl "DELETE ${CONSUMER_ALPHA_1_URL}/dlq" \
                 -X DELETE "${CONSUMER_ALPHA_1_URL}/dlq"
             ;;
-        14)
+        15)
             header "Health check — producer"
             run_curl "GET ${PRODUCER_ADMIN_URL}/healthcheck" "${PRODUCER_ADMIN_URL}/healthcheck"
             ;;
-        15)
+        16)
             header "Health check — consumer-alpha-1"
             run_curl "GET ${CONSUMER_ALPHA_1_ADMIN_URL}/healthcheck" "${CONSUMER_ALPHA_1_ADMIN_URL}/healthcheck"
             ;;
-        16)
+        17)
             header "Health check — consumer-alpha-2"
             run_curl "GET ${CONSUMER_ALPHA_2_ADMIN_URL}/healthcheck" "${CONSUMER_ALPHA_2_ADMIN_URL}/healthcheck"
             ;;
-        17)
+        18)
             header "Health check — consumer-beta"
             run_curl "GET ${CONSUMER_BETA_ADMIN_URL}/healthcheck" "${CONSUMER_BETA_ADMIN_URL}/healthcheck"
             ;;
