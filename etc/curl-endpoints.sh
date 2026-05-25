@@ -11,7 +11,8 @@ CONSUMER_ALPHA_1_URL="http://localhost:8081"
 CONSUMER_ALPHA_2_URL="http://localhost:8082"
 CONSUMER_BETA_URL="http://localhost:8083"
 PRODUCER_ADMIN_URL="http://localhost:8090"
-CONSUMER_ALPHA_ADMIN_URL="http://localhost:8091"
+CONSUMER_ALPHA_1_ADMIN_URL="http://localhost:8091"
+CONSUMER_ALPHA_2_ADMIN_URL="http://localhost:8092"
 CONSUMER_BETA_ADMIN_URL="http://localhost:8093"
 
 # Colors
@@ -54,7 +55,8 @@ show_menu() {
     section "Health checks"
     echo " 14) GET /healthcheck — producer"
     echo " 15) GET /healthcheck — consumer-alpha-1"
-    echo " 16) GET /healthcheck — consumer-beta"
+    echo " 16) GET /healthcheck — consumer-alpha-2"
+    echo " 17) GET /healthcheck — consumer-beta"
     echo ""
     echo "  q) Quit"
     echo ""
@@ -153,9 +155,13 @@ while true; do
             ;;
         15)
             header "Health check — consumer-alpha-1"
-            run_curl "GET ${CONSUMER_ALPHA_ADMIN_URL}/healthcheck" "${CONSUMER_ALPHA_ADMIN_URL}/healthcheck"
+            run_curl "GET ${CONSUMER_ALPHA_1_ADMIN_URL}/healthcheck" "${CONSUMER_ALPHA_1_ADMIN_URL}/healthcheck"
             ;;
         16)
+            header "Health check — consumer-alpha-2"
+            run_curl "GET ${CONSUMER_ALPHA_2_ADMIN_URL}/healthcheck" "${CONSUMER_ALPHA_2_ADMIN_URL}/healthcheck"
+            ;;
+        17)
             header "Health check — consumer-beta"
             run_curl "GET ${CONSUMER_BETA_ADMIN_URL}/healthcheck" "${CONSUMER_BETA_ADMIN_URL}/healthcheck"
             ;;
