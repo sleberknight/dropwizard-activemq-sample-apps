@@ -26,7 +26,7 @@ API collections covering all endpoints are in the `etc/` directory:
 cd docker && docker compose up --build
 ```
 
-`bin/setup.sh` clones dropwizard-activemq, installs it to your local Maven repository, and builds the sample app JARs.
+`bin/setup.sh` builds the sample app JARs. It optionally clones and locally installs dropwizard-activemq if you want to make or test local changes to it.
 
 ### Manual setup
 
