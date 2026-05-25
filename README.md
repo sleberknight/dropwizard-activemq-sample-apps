@@ -2,7 +2,7 @@
 
 [![build](https://github.com/sleberknight/dropwizard-activemq-sample-apps/actions/workflows/build.yml/badge.svg)](https://github.com/sleberknight/dropwizard-activemq-sample-apps/actions/workflows/build.yml)
 
-Sample Dropwizard services for functional testing of dropwizard-activemq before release.
+Sample Dropwizard services for functional testing of dropwizard-activemq.
 
 API collections covering all endpoints are in the `etc/` directory:
 
@@ -19,7 +19,7 @@ API collections covering all endpoints are in the `etc/` directory:
 
 ## Setup
 
-### Quick setup (Codespaces or no local dropwizard-activemq checkout)
+### Quick setup
 
 ```bash
 ./bin/setup.sh
