@@ -18,27 +18,30 @@ CONSUMER_BETA_ADMIN_URL="http://localhost:8093"
 if [[ -t 1 ]]; then
     BOLD="\033[1m"
     CYAN="\033[0;36m"
+    GREEN="\033[0;32m"
     YELLOW="\033[0;33m"
+    MAGENTA="\033[0;35m"
     RESET="\033[0m"
 else
-    BOLD="" CYAN="" YELLOW="" RESET=""
+    BOLD="" CYAN="" GREEN="" YELLOW="" MAGENTA="" RESET=""
 fi
 
-header() { echo -e "\n${CYAN}==>${RESET} ${BOLD}$*${RESET}"; }
-info()   { echo -e "${YELLOW}$*${RESET}"; }
+header()   { echo -e "\n${CYAN}==>${RESET} ${BOLD}$*${RESET}"; }
+info()     { echo -e "${YELLOW}$*${RESET}"; }
+section()  { echo -e "${BOLD}${GREEN}$*${RESET}"; }
 
 show_menu() {
     echo ""
-    echo -e "${BOLD}Dropwizard ActiveMQ Sample Apps — curl client${RESET}"
+    echo -e "${BOLD}${MAGENTA}Dropwizard ActiveMQ Sample Apps — curl client${RESET}"
     echo ""
-    echo -e "${BOLD}Producer${RESET}"
+    section "Producer"
     echo "  1) POST /produce — send order to topic:orders (virtual topic)"
     echo "  2) POST /produce — send announcement to fixedtopic:announcements"
     echo "  3) POST /produce — send notification to queue:notifications"
     echo "  4) POST /produce — send to queue:poison_pill (triggers DLQ after 30s)"
     echo "  5) POST /produce — send multiple messages (count=5) to topic:orders"
     echo ""
-    echo -e "${BOLD}Consumer${RESET}"
+    section "Consumer"
     echo "  6) GET  /received — consumer-alpha-1"
     echo "  7) GET  /received — consumer-alpha-2"
     echo "  8) GET  /received — consumer-beta"
@@ -48,7 +51,7 @@ show_menu() {
     echo " 12) DELETE /received — clear consumer-beta messages"
     echo " 13) DELETE /dlq — purge ActiveMQ.DLQ (resets dead-letter-queue health check)"
     echo ""
-    echo -e "${BOLD}Health checks${RESET}"
+    section "Health checks"
     echo " 14) GET /healthcheck — producer"
     echo " 15) GET /healthcheck — consumer-alpha-1"
     echo " 16) GET /healthcheck — consumer-beta"
