@@ -20,15 +20,17 @@ if [[ -t 1 ]]; then
     BOLD="\033[1m"
     CYAN="\033[0;36m"
     GREEN="\033[0;32m"
+    RED="\033[0;31m"
     YELLOW="\033[0;33m"
     MAGENTA="\033[0;35m"
     RESET="\033[0m"
 else
-    BOLD="" CYAN="" GREEN="" YELLOW="" MAGENTA="" RESET=""
+    BOLD="" CYAN="" GREEN="" RED="" YELLOW="" MAGENTA="" RESET=""
 fi
 
 header()   { echo -e "\n${CYAN}==>${RESET} ${BOLD}$*${RESET}"; }
 info()     { echo -e "${YELLOW}$*${RESET}"; }
+error()    { echo -e "${RED}Error: $*${RESET}"; }
 section()  { echo -e "${BOLD}${GREEN}$*${RESET}"; }
 
 show_menu() {
@@ -59,6 +61,11 @@ show_menu() {
     echo " 17) GET /healthcheck — consumer-alpha-2"
     echo " 18) GET /healthcheck — consumer-beta"
     echo ""
+    section "Docker Compose"
+    echo " d1) docker compose up -d          — start services in background"
+    echo " d2) docker compose up --build -d  — rebuild images then start"
+    echo " d3) docker compose down           — stop and remove containers"
+    echo ""
     echo "  q) Quit"
     echo ""
 }
@@ -68,7 +75,27 @@ run_curl() {
     shift
     info "  ${description}"
     echo ""
-    curl -s "$@" | jq .
+    local output curl_exit=0
+    output=$(curl -s "$@") || curl_exit=$?
+    if [[ ${curl_exit} -ne 0 ]]; then
+        if [[ ${curl_exit} -eq 7 ]]; then
+            error "Could not connect to the service (curl exit code 7 — connection refused)."
+            echo -e "${YELLOW}  Are the services running? Try option d1 or d2 to start them.${RESET}"
+        else
+            error "curl failed with exit code ${curl_exit}."
+            echo -e "${YELLOW}  Are the services running? Try option d1 or d2 to start them.${RESET}"
+        fi
+    else
+        echo "${output}" | jq .
+    fi
+    echo ""
+}
+
+run_compose() {
+    local description="$1"
+    shift
+    header "${description}"
+    (cd docker && docker compose "$@") || true
     echo ""
 }
 
@@ -174,6 +201,15 @@ while true; do
         18)
             header "Health check — consumer-beta"
             run_curl "GET ${CONSUMER_BETA_ADMIN_URL}/healthcheck" "${CONSUMER_BETA_ADMIN_URL}/healthcheck"
+            ;;
+        d1|D1)
+            run_compose "docker compose up -d" up -d
+            ;;
+        d2|D2)
+            run_compose "docker compose up --build -d" up --build -d
+            ;;
+        d3|D3)
+            run_compose "docker compose down" down
             ;;
         q|Q)
             echo ""
