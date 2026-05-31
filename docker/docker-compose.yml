@@ -1,6 +1,6 @@
 services:
   activemq:
-    image: apache/activemq-classic:5.19.2
+    image: apache/activemq:${ACTIVEMQ_VERSION:-5.19.6}
     ports:
       - "61616:61616"
       - "8161:8161"

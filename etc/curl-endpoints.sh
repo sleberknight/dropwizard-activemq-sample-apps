@@ -15,6 +15,9 @@ CONSUMER_ALPHA_1_ADMIN_URL="http://localhost:8091"
 CONSUMER_ALPHA_2_ADMIN_URL="http://localhost:8092"
 CONSUMER_BETA_ADMIN_URL="http://localhost:8093"
 
+ACTIVEMQ_VERSION="${ACTIVEMQ_VERSION:-5.19.6}"
+export ACTIVEMQ_VERSION
+
 # Colors
 if [[ -t 1 ]]; then
     BOLD="\033[1m"
@@ -65,6 +68,7 @@ show_menu() {
     echo " d1) docker compose up -d          — start services in background"
     echo " d2) docker compose up --build -d  — rebuild images then start"
     echo " d3) docker compose down           — stop and remove containers"
+    echo " dv) Set ActiveMQ version          — currently: ${ACTIVEMQ_VERSION}"
     echo ""
     echo "  q) Quit"
     echo ""
@@ -201,6 +205,19 @@ while true; do
         18)
             header "Health check — consumer-beta"
             run_curl "GET ${CONSUMER_BETA_ADMIN_URL}/healthcheck" "${CONSUMER_BETA_ADMIN_URL}/healthcheck"
+            ;;
+        dv|DV)
+            echo ""
+            read -r -p "ActiveMQ version [${ACTIVEMQ_VERSION}]: " new_version
+            if [[ -n "${new_version}" ]]; then
+                ACTIVEMQ_VERSION="${new_version}"
+                export ACTIVEMQ_VERSION
+                info "  ActiveMQ version set to ${ACTIVEMQ_VERSION}"
+                info "  -> Run d3 to stop any running services, then d1 to start with the new version."
+            else
+                info "  ActiveMQ version unchanged: ${ACTIVEMQ_VERSION}"
+            fi
+            echo ""
             ;;
         d1|D1)
             run_compose "docker compose up -d" up -d
