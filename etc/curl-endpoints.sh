@@ -69,6 +69,7 @@ show_menu() {
     echo " d2) docker compose up --build -d  — rebuild images then start"
     echo " d3) docker compose down           — stop and remove containers"
     echo " dv) Set ActiveMQ version          — currently: ${ACTIVEMQ_VERSION}"
+    echo " dt) Show available image tags     — query Docker Hub for apache/activemq"
     echo ""
     echo "  q) Quit"
     echo ""
@@ -91,6 +92,30 @@ run_curl() {
         fi
     else
         echo "${output}" | jq .
+    fi
+    echo ""
+}
+
+show_amq_tags() {
+    local default_filter="${ACTIVEMQ_VERSION%.*}"
+    echo ""
+    read -r -p "Filter [${default_filter}]: " tag_filter
+    [[ -z "${tag_filter}" ]] && tag_filter="${default_filter}"
+    info "  Fetching tags matching \"${tag_filter}\" from Docker Hub..."
+    echo ""
+    local tag_result tag_exit=0
+    tag_result=$(curl -s "https://hub.docker.com/v2/repositories/apache/activemq/tags?page_size=100&name=${tag_filter}") || tag_exit=$?
+    if [[ ${tag_exit} -ne 0 ]]; then
+        error "Could not reach Docker Hub (curl exit code ${tag_exit})."
+        echo ""
+        return
+    fi
+    local tags
+    tags=$(echo "${tag_result}" | jq -r '.results[].name' | sort -Vr) || tags=""
+    if [[ -z "${tags}" ]]; then
+        info "  No tags found matching \"${tag_filter}\"."
+    else
+        echo "${tags}" | sed 's/^/  /'
     fi
     echo ""
 }
@@ -205,6 +230,9 @@ while true; do
         18)
             header "Health check — consumer-beta"
             run_curl "GET ${CONSUMER_BETA_ADMIN_URL}/healthcheck" "${CONSUMER_BETA_ADMIN_URL}/healthcheck"
+            ;;
+        dt|DT)
+            show_amq_tags
             ;;
         dv|DV)
             echo ""
