@@ -43,7 +43,39 @@
     </bean>
     <bean id="securityConstraintMapping" class="org.eclipse.jetty.security.ConstraintMapping">
         <property name="constraint" ref="securityConstraint" />
-        <property name="pathSpec" value="/,/api/*,*.jsp,*.html,*.js,*.css,*.png,*.gif,*.ico" />
+        <property name="pathSpec" value="/" />
+    </bean>
+    <bean id="securityConstraintMappingApi" class="org.eclipse.jetty.security.ConstraintMapping">
+        <property name="constraint" ref="securityConstraint" />
+        <property name="pathSpec" value="/api/*" />
+    </bean>
+    <bean id="securityConstraintMappingJsp" class="org.eclipse.jetty.security.ConstraintMapping">
+        <property name="constraint" ref="securityConstraint" />
+        <property name="pathSpec" value="*.jsp" />
+    </bean>
+    <bean id="securityConstraintMappingHtml" class="org.eclipse.jetty.security.ConstraintMapping">
+        <property name="constraint" ref="securityConstraint" />
+        <property name="pathSpec" value="*.html" />
+    </bean>
+    <bean id="securityConstraintMappingJs" class="org.eclipse.jetty.security.ConstraintMapping">
+        <property name="constraint" ref="securityConstraint" />
+        <property name="pathSpec" value="*.js" />
+    </bean>
+    <bean id="securityConstraintMappingCss" class="org.eclipse.jetty.security.ConstraintMapping">
+        <property name="constraint" ref="securityConstraint" />
+        <property name="pathSpec" value="*.css" />
+    </bean>
+    <bean id="securityConstraintMappingPng" class="org.eclipse.jetty.security.ConstraintMapping">
+        <property name="constraint" ref="securityConstraint" />
+        <property name="pathSpec" value="*.png" />
+    </bean>
+    <bean id="securityConstraintMappingGif" class="org.eclipse.jetty.security.ConstraintMapping">
+        <property name="constraint" ref="securityConstraint" />
+        <property name="pathSpec" value="*.gif" />
+    </bean>
+    <bean id="securityConstraintMappingIco" class="org.eclipse.jetty.security.ConstraintMapping">
+        <property name="constraint" ref="securityConstraint" />
+        <property name="pathSpec" value="*.ico" />
     </bean>
     <bean id="adminSecurityConstraintMapping" class="org.eclipse.jetty.security.ConstraintMapping">
         <property name="constraint" ref="adminSecurityConstraint" />
@@ -126,6 +158,14 @@
             <list>
                 <ref bean="adminSecurityConstraintMapping" />
                 <ref bean="securityConstraintMapping" />
+                <ref bean="securityConstraintMappingApi" />
+                <ref bean="securityConstraintMappingJsp" />
+                <ref bean="securityConstraintMappingHtml" />
+                <ref bean="securityConstraintMappingJs" />
+                <ref bean="securityConstraintMappingCss" />
+                <ref bean="securityConstraintMappingPng" />
+                <ref bean="securityConstraintMappingGif" />
+                <ref bean="securityConstraintMappingIco" />
             </list>
         </property>
         <property name="handler" ref="secHandlerCollection" />

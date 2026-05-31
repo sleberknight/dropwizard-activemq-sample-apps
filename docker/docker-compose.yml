@@ -7,6 +7,7 @@ services:
     volumes:
       - ./jolokia-access.xml:/opt/apache-activemq/conf/jolokia-access.xml
       - ./jetty.xml:/opt/apache-activemq/conf/jetty.xml
+      - ./jetty-realm.properties:/opt/apache-activemq/conf/jetty-realm.properties
     healthcheck:
       test: ["CMD-SHELL", "bash -c '</dev/tcp/localhost/61616'"]
       interval: 5s
