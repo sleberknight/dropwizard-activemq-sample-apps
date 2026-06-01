@@ -6,6 +6,8 @@
 
 set -euo pipefail
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
 PRODUCER_URL="http://localhost:8080"
 CONSUMER_ALPHA_1_URL="http://localhost:8081"
 CONSUMER_ALPHA_2_URL="http://localhost:8082"
@@ -124,7 +126,7 @@ run_compose() {
     local description="$1"
     shift
     header "${description}"
-    (cd docker && docker compose "$@") || true
+    (cd "${SCRIPT_DIR}/../docker" && docker compose "$@") || true
     echo ""
 }
 
