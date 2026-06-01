@@ -67,9 +67,11 @@ show_menu() {
     echo " 18) GET /healthcheck — consumer-beta"
     echo ""
     section "Docker Compose"
+    echo " ds) docker compose ps             — show container status"
     echo " d1) docker compose up -d          — start services in background"
     echo " d2) docker compose up --build -d  — rebuild images then start"
     echo " d3) docker compose down           — stop and remove containers"
+    echo " d4) docker compose stop          — stop containers (keeps them for faster restart)"
     echo " dv) Set ActiveMQ version          — currently: ${ACTIVEMQ_VERSION}"
     echo " dt) Show available image tags     — query Docker Hub for apache/activemq"
     echo ""
@@ -249,6 +251,9 @@ while true; do
             fi
             echo ""
             ;;
+        ds|DS)
+            run_compose "docker compose ps" ps
+            ;;
         d1|D1)
             run_compose "docker compose up -d" up -d
             ;;
@@ -257,6 +262,9 @@ while true; do
             ;;
         d3|D3)
             run_compose "docker compose down" down
+            ;;
+        d4|D4)
+            run_compose "docker compose stop" stop
             ;;
         q|Q)
             echo ""
