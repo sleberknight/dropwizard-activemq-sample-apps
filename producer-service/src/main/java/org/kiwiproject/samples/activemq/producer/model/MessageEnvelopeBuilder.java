@@ -21,6 +21,7 @@ public class MessageEnvelopeBuilder {
             case JSON_LEGACY -> buildJsonLegacy(request);
             case JSON_ECHOED_CURRENT -> buildJsonEchoedCurrent(request);
             case JSON_ECHOED_LEGACY -> buildJsonEchoedLegacy(request);
+            case JSON_CONFLICTING_TYPES -> buildJsonConflictingTypes(request);
             case XML, TEXT, BYTES -> textPayload(request);
         };
     }
@@ -68,6 +69,24 @@ public class MessageEnvelopeBuilder {
         ObjectNode envelope = mapper.createObjectNode();
         envelope.put(MESSAGE_TYPE, "ECHO_MESSAGE");
         envelope.set("echoedMessage", inner);
+        return envelope.toString();
+    }
+
+    /**
+     * Builds a message with two different, conflicting message-type values: one at the top level
+     * (the "current" location) and one under metaData (the "legacy" location). MessageTypeParser
+     * collects distinct values from every path it checks, so this triggers Guava's verify() failure
+     * in extractMessageType, used to functionally test dropwizard-activemq's handling of that case.
+     */
+    private String buildJsonConflictingTypes(ProduceRequest request) {
+        ObjectNode envelope = mapper.createObjectNode();
+        envelope.put(MESSAGE_TYPE, request.getMessageType());
+        ObjectNode metaData = mapper.createObjectNode();
+        metaData.put("type", request.getMessageType() + "_LEGACY");
+        envelope.set("metaData", metaData);
+        if (nonNull(request.getData())) {
+            envelope.set("data", request.getData());
+        }
         return envelope.toString();
     }
 

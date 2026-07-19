@@ -66,6 +66,9 @@ show_menu() {
     echo " 17) GET /healthcheck — consumer-alpha-2"
     echo " 18) GET /healthcheck — consumer-beta"
     echo ""
+    section "Error scenarios"
+    echo " 19) POST /produce — send message with conflicting types (triggers VerifyException)"
+    echo ""
     section "Docker Compose"
     echo " ds) docker compose ps             — show container status"
     echo " d1) docker compose up -d          — start services in background"
@@ -234,6 +237,14 @@ while true; do
         18)
             header "Health check — consumer-beta"
             run_curl "GET ${CONSUMER_BETA_ADMIN_URL}/healthcheck" "${CONSUMER_BETA_ADMIN_URL}/healthcheck"
+            ;;
+        19)
+            header "Send message with conflicting types to topic:orders (triggers VerifyException)"
+            run_curl "POST ${PRODUCER_URL}/produce" \
+                -X POST "${PRODUCER_URL}/produce" \
+                -H "Content-Type: application/json" \
+                -d '{"destination":"topic:orders","sendToAllEventsQueue":false,"format":"JSON_CONFLICTING_TYPES","messageType":"ORDER_PLACED","data":{"orderId":"789","total":29.99}}'
+            info "  Watch consumer logs (docker compose logs -f consumer-alpha-1) for the failure and recovery cycle."
             ;;
         dt|DT)
             show_amq_tags

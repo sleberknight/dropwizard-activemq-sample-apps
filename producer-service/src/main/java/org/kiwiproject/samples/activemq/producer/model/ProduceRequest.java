@@ -16,6 +16,7 @@ public class ProduceRequest {
         JSON_LEGACY,
         JSON_ECHOED_CURRENT,
         JSON_ECHOED_LEGACY,
+        JSON_CONFLICTING_TYPES,
         XML,
         TEXT,
         BYTES

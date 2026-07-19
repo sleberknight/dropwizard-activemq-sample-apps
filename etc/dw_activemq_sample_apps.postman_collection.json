@@ -97,6 +97,19 @@
             },
             "url": { "raw": "http://localhost:8080/produce", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["produce"] }
           }
+        },
+        {
+          "name": "Post JSON conflicting types (triggers VerifyException)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"destination\": \"topic:orders\",\n  \"sendToAllEventsQueue\": false,\n  \"format\": \"JSON_CONFLICTING_TYPES\",\n  \"messageType\": \"ORDER_PLACED\",\n  \"data\": {\n    \"orderId\": \"789\",\n    \"total\": 29.99\n  }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "http://localhost:8080/produce", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["produce"] }
+          }
         }
       ]
     },
