@@ -96,6 +96,23 @@ Content-Type: application/json
   "data": "bytes order message"
 }
 
+### Post JSON with conflicting types (triggers VerifyException in MessageTypeParser)
+### Sets both the current-format messageType and the legacy metaData.type to different values.
+### Watch consumer logs (docker compose logs -f consumer-alpha-1) for the failure and recovery cycle.
+POST http://localhost:8080/produce
+Content-Type: application/json
+
+{
+  "destination": "topic:orders",
+  "sendToAllEventsQueue": false,
+  "format": "JSON_CONFLICTING_TYPES",
+  "messageType": "ORDER_PLACED",
+  "data": {
+    "orderId": "789",
+    "total": 29.99
+  }
+}
+
 ### Producer - Plain JMS Topic (fixedtopic:announcements)
 ### Both consumer-alpha-1 and consumer-beta receive every message (fan-out)
 

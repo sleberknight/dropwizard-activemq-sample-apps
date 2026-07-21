@@ -108,6 +108,7 @@ Response:
 | `JSON_LEGACY`         | `{"metaData":{"type":"..."}, "data":{...}}`                                      |
 | `JSON_ECHOED_CURRENT` | `{"messageType":"ECHO_MESSAGE","echoedMessage":{"messageType":"...",...}}`       |
 | `JSON_ECHOED_LEGACY`  | `{"messageType":"ECHO_MESSAGE","echoedMessage":{"metaData":{"type":"..."},...}}` |
+| `JSON_CONFLICTING_TYPES` | `{"messageType":"...", "metaData":{"type":"..._LEGACY"}, "data":{...}}` — sets both to different values, triggering `MessageTypeParser`'s `VerifyException` |
 | `XML`                 | `data` sent as TEXT_MESSAGE (pass XML string as `"data"` value)                  |
 | `TEXT`                | `data` sent as TEXT_MESSAGE (pass plain string as `"data"` value)                |
 | `BYTES`               | `data` sent as BytesMessage (pass string as `"data"` value, UTF-8 encoded)       |
@@ -152,6 +153,25 @@ When a consumer receives a BYTES message, `rawPayload` in the response is base64
 `queue:poison_pill` has no consumer. Messages expire after 30 seconds and move to `ActiveMQ.DLQ`.
 Consumer Alpha's `dead-letter-queue` health check at `http://localhost:8091/healthcheck` will go
 unhealthy once the message appears there.
+
+### Example: trigger a message-processing failure (conflicting types)
+
+```json
+{
+  "destination": "topic:orders",
+  "sendToAllEventsQueue": false,
+  "format": "JSON_CONFLICTING_TYPES",
+  "messageType": "ORDER_PLACED",
+  "data": { "orderId": "789", "total": 29.99 }
+}
+```
+
+Sets both the current-format `messageType` and the legacy `metaData.type` to different values,
+so `MessageTypeParser` finds more than one distinct type and throws `VerifyException`. Sent to
+`topic:orders`, which has active consumers, so this exercises dropwizard-activemq's live-consumption
+failure handling (as opposed to `queue:poison_pill`, which tests TTL-expiry dead-lettering — a
+different mechanism entirely). Watch `docker compose logs -f consumer-alpha-1` for the failure and
+recovery cycle, and consumer-alpha's health check for a brief unhealthy blip while it recovers.
 
 ## Consumer API
 
