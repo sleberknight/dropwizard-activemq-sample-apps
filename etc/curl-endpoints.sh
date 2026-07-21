@@ -68,6 +68,7 @@ show_menu() {
     echo ""
     section "Error scenarios"
     echo " 19) POST /produce — send message with conflicting types (triggers VerifyException)"
+    echo " 20) POST /produce — send MapMessage to queue:notifications (triggers UnknownMessageTypeException)"
     echo ""
     section "Docker Compose"
     echo " ds) docker compose ps             — show container status"
@@ -245,6 +246,14 @@ while true; do
                 -H "Content-Type: application/json" \
                 -d '{"destination":"topic:orders","sendToAllEventsQueue":false,"format":"JSON_CONFLICTING_TYPES","messageType":"ORDER_PLACED","data":{"orderId":"789","total":29.99}}'
             info "  Watch consumer logs (docker compose logs -f consumer-alpha-1) for the failure and recovery cycle."
+            ;;
+        20)
+            header "Send MapMessage to queue:notifications (triggers UnknownMessageTypeException)"
+            run_curl "POST ${PRODUCER_URL}/produce" \
+                -X POST "${PRODUCER_URL}/produce" \
+                -H "Content-Type: application/json" \
+                -d '{"destination":"queue:notifications","format":"MAP_MESSAGE","data":{"userId":"42","message":"sent as a MapMessage"}}'
+            info "  Watch consumer logs (docker compose logs -f consumer-alpha-1) for the failure."
             ;;
         dt|DT)
             show_amq_tags

@@ -164,6 +164,21 @@ Content-Type: application/json
   }
 }
 
+### Post MapMessage (triggers UnknownMessageTypeException)
+### ActiveMqProducer only supports TextMessage/BytesMessage; this bypasses it via a raw JMS connection.
+### Watch consumer logs (docker compose logs -f consumer-alpha-1) for the failure.
+POST http://localhost:8080/produce
+Content-Type: application/json
+
+{
+  "destination": "queue:notifications",
+  "format": "MAP_MESSAGE",
+  "data": {
+    "userId": "42",
+    "message": "sent as a MapMessage"
+  }
+}
+
 ### Producer - DLQ Testing (queue:poison_pill)
 ### No consumer; messages expire after 30s TTL and move to ActiveMQ.DLQ
 

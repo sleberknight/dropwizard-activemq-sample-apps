@@ -159,6 +159,19 @@
             },
             "url": { "raw": "http://localhost:8080/produce", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["produce"] }
           }
+        },
+        {
+          "name": "Post MapMessage (triggers UnknownMessageTypeException)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"destination\": \"queue:notifications\",\n  \"format\": \"MAP_MESSAGE\",\n  \"data\": {\n    \"userId\": \"42\",\n    \"message\": \"sent as a MapMessage\"\n  }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "http://localhost:8080/produce", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["produce"] }
+          }
         }
       ]
     },

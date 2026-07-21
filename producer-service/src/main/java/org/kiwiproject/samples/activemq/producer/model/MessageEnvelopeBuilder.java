@@ -23,6 +23,8 @@ public class MessageEnvelopeBuilder {
             case JSON_ECHOED_LEGACY -> buildJsonEchoedLegacy(request);
             case JSON_CONFLICTING_TYPES -> buildJsonConflictingTypes(request);
             case XML, TEXT, BYTES -> textPayload(request);
+            case MAP_MESSAGE -> throw new IllegalStateException(
+                    "MAP_MESSAGE does not have a String envelope; it must be sent via RawJmsMessageSender");
         };
     }
 

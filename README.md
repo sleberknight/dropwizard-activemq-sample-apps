@@ -112,9 +112,14 @@ Response:
 | `XML`                 | `data` sent as TEXT_MESSAGE (pass XML string as `"data"` value)                  |
 | `TEXT`                | `data` sent as TEXT_MESSAGE (pass plain string as `"data"` value)                |
 | `BYTES`               | `data` sent as BytesMessage (pass string as `"data"` value, UTF-8 encoded)       |
+| `MAP_MESSAGE`         | `data` fields sent as a JMS MapMessage, bypassing `ActiveMqProducer` entirely (it only supports TextMessage/BytesMessage) — triggers `Consumer`'s `UnknownMessageTypeException` |
 
 For BYTES format, `sendToAllEventsQueue` is ignored — bytes go to the specified destination only.
 When a consumer receives a BYTES message, `rawPayload` in the response is base64-encoded.
+
+For MAP_MESSAGE format, `sendToAllEventsQueue` is ignored and `destination` must be a `queue:` destination
+(e.g. `queue:notifications`) — it is sent via a raw JMS connection built directly from `ActiveMqConfig`,
+not through `ActiveMqProducer`.
 
 ### Example: send an XML message
 
@@ -172,6 +177,22 @@ so `MessageTypeParser` finds more than one distinct type and throws `VerifyExcep
 failure handling (as opposed to `queue:poison_pill`, which tests TTL-expiry dead-lettering — a
 different mechanism entirely). Watch `docker compose logs -f consumer-alpha-1` for the failure and
 recovery cycle, and consumer-alpha's health check for a brief unhealthy blip while it recovers.
+
+### Example: trigger an unsupported message type
+
+```json
+{
+  "destination": "queue:notifications",
+  "format": "MAP_MESSAGE",
+  "data": { "userId": "42", "message": "sent as a MapMessage" }
+}
+```
+
+`ActiveMqProducer` only supports `TextMessage` and `BytesMessage`, so this bypasses it and sends a
+raw JMS `MapMessage` directly to the physical queue, simulating a foreign producer sending a message
+type this library cannot handle. Triggers `Consumer`'s `UnknownMessageTypeException`. Watch
+`docker compose logs -f consumer-alpha-1` (or `-2`, `-beta`, since `queue:notifications` has
+competing consumers) for the failure.
 
 ## Consumer API
 
