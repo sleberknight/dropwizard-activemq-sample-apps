@@ -4,6 +4,7 @@ import io.dropwizard.core.Application;
 import io.dropwizard.core.setup.Environment;
 import org.kiwiproject.dropwizard.activemq.DropwizardActiveMq;
 import org.kiwiproject.dropwizard.activemq.health.DeadLetterQueueHealthCheck;
+import org.kiwiproject.samples.activemq.producer.jms.RawJmsMessageSender;
 import org.kiwiproject.samples.activemq.producer.model.MessageEnvelopeBuilder;
 import org.kiwiproject.samples.activemq.producer.resource.ProducerResource;
 
@@ -26,6 +27,8 @@ public class ProducerApplication extends Application<ProducerConfig> {
                 new DeadLetterQueueHealthCheck(config.getActiveMqConfig()));
 
         var envelopeBuilder = new MessageEnvelopeBuilder(environment.getObjectMapper());
-        environment.jersey().register(new ProducerResource(config.getServiceName(), producer, envelopeBuilder));
+        var rawJmsMessageSender = new RawJmsMessageSender(config.getActiveMqConfig());
+        environment.jersey().register(
+                new ProducerResource(config.getServiceName(), producer, envelopeBuilder, rawJmsMessageSender));
     }
 }

@@ -11,6 +11,7 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.kiwiproject.dropwizard.activemq.ActiveMqProducer;
+import org.kiwiproject.samples.activemq.producer.jms.RawJmsMessageSender;
 import org.kiwiproject.samples.activemq.producer.model.MessageEnvelopeBuilder;
 import org.kiwiproject.samples.activemq.producer.model.ProduceRequest;
 import org.kiwiproject.samples.activemq.producer.model.ProduceRequest.Format;
@@ -24,26 +25,37 @@ public class ProducerResource {
     private final String serviceName;
     private final ActiveMqProducer producer;
     private final MessageEnvelopeBuilder envelopeBuilder;
+    private final RawJmsMessageSender rawJmsMessageSender;
 
-    public ProducerResource(String serviceName, ActiveMqProducer producer, MessageEnvelopeBuilder envelopeBuilder) {
+    public ProducerResource(String serviceName,
+                            ActiveMqProducer producer,
+                            MessageEnvelopeBuilder envelopeBuilder,
+                            RawJmsMessageSender rawJmsMessageSender) {
         this.serviceName = serviceName;
         this.producer = producer;
         this.envelopeBuilder = envelopeBuilder;
+        this.rawJmsMessageSender = rawJmsMessageSender;
     }
 
     @POST
     public Response produce(@Valid @NotNull ProduceRequest request) {
-        var payload = envelopeBuilder.build(request);
         var destination = request.getDestination();
         var format = request.getFormat();
 
-        for (int i = 0; i < request.getCount(); i++) {
-            if (format == Format.BYTES) {
-                producer.produceBytesMessage(destination, payload.getBytes(UTF_8));
-            } else if (request.isSendToAllEventsQueue()) {
-                producer.produceToDestinationAndAllEventsQueue(destination, payload);
-            } else {
-                producer.produceToDestination(destination, payload);
+        if (format == Format.MAP_MESSAGE) {
+            for (int i = 0; i < request.getCount(); i++) {
+                rawJmsMessageSender.sendMapMessage(destination, request.getData());
+            }
+        } else {
+            var payload = envelopeBuilder.build(request);
+            for (int i = 0; i < request.getCount(); i++) {
+                if (format == Format.BYTES) {
+                    producer.produceBytesMessage(destination, payload.getBytes(UTF_8));
+                } else if (request.isSendToAllEventsQueue()) {
+                    producer.produceToDestinationAndAllEventsQueue(destination, payload);
+                } else {
+                    producer.produceToDestination(destination, payload);
+                }
             }
         }
 

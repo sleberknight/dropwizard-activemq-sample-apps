@@ -19,7 +19,8 @@ public class ProduceRequest {
         JSON_CONFLICTING_TYPES,
         XML,
         TEXT,
-        BYTES
+        BYTES,
+        MAP_MESSAGE
     }
 
     @NotBlank
