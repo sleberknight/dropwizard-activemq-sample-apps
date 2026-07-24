@@ -343,6 +343,18 @@
           }
         }
       ]
+    },
+    {
+      "name": "Admin Tasks",
+      "item": [
+        {
+          "name": "Inspect DLQ (producer)",
+          "request": {
+            "method": "POST",
+            "url": { "raw": "http://localhost:8090/tasks/inspectDeadLetterQueue", "protocol": "http", "host": ["localhost"], "port": "8090", "path": ["tasks", "inspectDeadLetterQueue"] }
+          }
+        }
+      ]
     }
   ]
 }
