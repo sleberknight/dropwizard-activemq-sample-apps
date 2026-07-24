@@ -245,6 +245,11 @@ DELETE http://localhost:8081/dlq
 ### Purge the DLQ (via consumer-beta)
 DELETE http://localhost:8083/dlq
 
+### Admin Tasks
+
+### Inspect the ActiveMQ dead letter queue (ActiveMQ.DLQ) via the producer's admin task
+POST http://localhost:8090/tasks/inspectDeadLetterQueue
+
 ### Health Checks
 
 ### Producer health check (includes ActiveMQ Producer Stats and dead-letter-queue)
