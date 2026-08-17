@@ -1,0 +1,11 @@
+meta {
+  name: Inspect DLQ - producer
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://localhost:8090/tasks/inspectDeadLetterQueue
+  body: none
+  auth: none
+}

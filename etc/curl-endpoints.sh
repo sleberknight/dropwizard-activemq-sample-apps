@@ -70,6 +70,9 @@ show_menu() {
     echo " 19) POST /produce — send message with conflicting types (triggers VerifyException)"
     echo " 20) POST /produce — send MapMessage to queue:notifications (triggers UnknownMessageTypeException)"
     echo ""
+    section "Admin tasks"
+    echo " 21) POST /tasks/inspectDeadLetterQueue — producer"
+    echo ""
     section "Docker Compose"
     echo " ds) docker compose ps             — show container status"
     echo " d1) docker compose up -d          — start services in background"
@@ -100,6 +103,27 @@ run_curl() {
         fi
     else
         echo "${output}" | jq .
+    fi
+    echo ""
+}
+
+run_curl_text() {
+    local description="$1"
+    shift
+    info "  ${description}"
+    echo ""
+    local output curl_exit=0
+    output=$(curl -s "$@") || curl_exit=$?
+    if [[ ${curl_exit} -ne 0 ]]; then
+        if [[ ${curl_exit} -eq 7 ]]; then
+            error "Could not connect to the service (curl exit code 7 — connection refused)."
+            echo -e "${YELLOW}  Are the services running? Try option d1 or d2 to start them.${RESET}"
+        else
+            error "curl failed with exit code ${curl_exit}."
+            echo -e "${YELLOW}  Are the services running? Try option d1 or d2 to start them.${RESET}"
+        fi
+    else
+        echo "${output}"
     fi
     echo ""
 }
@@ -254,6 +278,11 @@ while true; do
                 -H "Content-Type: application/json" \
                 -d '{"destination":"queue:notifications","format":"MAP_MESSAGE","data":{"userId":"42","message":"sent as a MapMessage"}}'
             info "  Watch consumer logs (docker compose logs -f consumer-alpha-1) for the failure."
+            ;;
+        21)
+            header "Inspect ActiveMQ.DLQ — producer"
+            run_curl_text "POST ${PRODUCER_ADMIN_URL}/tasks/inspectDeadLetterQueue" \
+                -X POST "${PRODUCER_ADMIN_URL}/tasks/inspectDeadLetterQueue"
             ;;
         dt|DT)
             show_amq_tags

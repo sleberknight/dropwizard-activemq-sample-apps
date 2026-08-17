@@ -230,6 +230,25 @@ Clears all received messages.
 Purges all messages from `ActiveMQ.DLQ` via Jolokia. Use this to reset the dead-letter queue after
 testing DLQ behavior so the `dead-letter-queue` health check returns to healthy.
 
+## Admin Tasks
+
+### POST /tasks/inspectDeadLetterQueue (producer, port 8090)
+
+Inspects `ActiveMQ.DLQ` using `dropwizard-activemq`'s `InspectDlqTask`/`QueueInspector` and prints
+message counts by type as plain text:
+
+```
+textMessageCount: 1
+bytesMessageCount: 0
+otherMessageCount: 0
+
+Text message types:
+UNKNOWN: 1
+```
+
+If the DLQ doesn't exist yet, it prints `DLQ does not exist`. Use the poison-pill example above to
+populate the DLQ first.
+
 ## Health Checks
 
 - Producer: `http://localhost:8090/healthcheck` — includes `dead-letter-queue` check
